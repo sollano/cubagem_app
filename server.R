@@ -965,6 +965,213 @@ shinyServer(function(input, output, session){
   
   
   
+  
+  
+  # Distribuicoes e graficos ####
+  
+  dd_list <- reactive({
+    
+    nm <- varnames()
+    dados <- vol_arvore()
+    
+    validate(
+      need(dados, "Por favor faça o cálculo do volume"),
+      need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  ") )
+    
+    lista <- list()
+
+    lista[["dd_geral"]] <- classe_diametro(df = dados, 
+                                           dap = nm$dap,
+                                           parcela = NA,
+                                           area_parcela = NA, 
+                                           ic = nm$IC.dap, 
+                                           dapmin = nm$diam.min, 
+                                           especies = NA, 
+                                           volume = "VCC",
+                                           rotulo.NI = NA ) %>%
+                                           rename(VCC= volume)
+    
+    # Se o Volume sem casca for calculado, inclui-lo na tabela
+    if(suppressWarnings(!is.null(dados$VSC))){
+      lista[["dd_geral"]] <- lista[["dd_geral"]] %>% 
+        mutate(VSC = classe_diametro(df = dados, 
+                                     dap = nm$dap,
+                                     parcela = NA,
+                                     area_parcela = NA, 
+                                     ic = nm$IC.dap, 
+                                     dapmin = nm$diam.min, 
+                                     especies = NA, 
+                                     volume = "VSC",
+                                     rotulo.NI = NA ) %>%
+                 rename(VSC= volume) %>%
+                 pull(VSC) )
+      
+    }
+    
+    
+    lista
+  })
+  
+  output$dd_geral_tab <- DT::renderDataTable({
+    
+    g <- round_df(dd_list()[["dd_geral"]], 2)
+    
+    datatable( g,
+               rownames = F,
+               options = list(searching = FALSE,
+                              paging=FALSE,
+                              ordering=FALSE,
+                              initComplete = JS(
+                                "function(settings, json) {",
+                                "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
+                                "}")
+               )
+    )
+    
+    
+  })
+  
+  dd_g1 <- reactive({
+    
+    g <- dd_list()[["dd_geral"]]
+    #g$CC2 <-  sapply(g$CC , gsub, pattern= "[.]",replacement= "," )
+    
+    ggplot(g, aes(as.factor(CC),NumIndv)) +
+      geom_bar(stat = "identity",color="black")+
+      #   scale_y_continuous( expand=c(0,15) ) +
+      ggthemes::theme_igray(base_family = "serif") +
+      labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Nº de Individuos") + 
+      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.title   = element_text(size = 26,face="bold"), 
+        axis.text    = element_text(size = 22),
+        axis.text.x = element_blank(),
+        axis.line.x = element_line(color="black"),
+        axis.line.y = element_line(color="black"),
+        strip.text.x = element_text(size = 22)   )
+    
+    
+  })
+  output$dd_graph_indv <- renderPlot({
+    
+    dd_g1()
+    
+    
+  })
+  dd_g2 <- reactive({
+    
+    g <- dd_list()[["dd_geral"]]
+    
+    ggplot(g, aes(as.factor(CC),VCC)) +
+      geom_bar(stat = "identity",color="black")+
+      #  scale_y_continuous( expand=c(0,15) ) +
+      labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Volume com casca") + 
+      ggthemes::theme_igray(base_family = "serif") +
+      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.title   = element_text(size = 26,face="bold"), 
+        axis.text    = element_text(size = 22),
+        axis.text.x = element_blank(),
+        axis.line.x = element_line(color="black"),
+        axis.line.y = element_line(color="black"),
+        strip.text.x = element_text(size = 22)   )
+    
+  })
+  output$dd_graph_vcc <- renderPlot({
+    
+    dd_g2()
+    
+  })
+  dd_g3 <- reactive({
+    
+    g <- dd_list()[["dd_geral"]]
+    
+    ggplot(g, aes(as.factor(CC),VSC)) +
+      geom_bar(stat = "identity",color="black")+
+      #  scale_y_continuous( expand=c(0,15) ) +
+      labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Volume sem casca") + 
+      ggthemes::theme_igray(base_family = "serif") +
+      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.title   = element_text(size = 26,face="bold"), 
+        axis.text    = element_text(size = 22),
+        axis.text.x = element_blank(),
+        axis.line.x = element_line(color="black"),
+        axis.line.y = element_line(color="black"),
+        strip.text.x = element_text(size = 22)   )
+    
+  })
+  output$dd_graph_vsc <- renderPlot({
+    
+    dd_g3()
+    
+  })
+  dd_g4 <- reactive({
+    
+    g <- dd_list()[["dd_geral"]] 
+    
+    ggplot(g, aes(as.factor(CC),G)) +
+      geom_bar(stat = "identity",color="black")+
+      # scale_y_continuous( expand=c(0,15) ) +
+      labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Área Basal (G)") + 
+      ggthemes::theme_igray(base_family = "serif") +
+      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.title   = element_text(size = 26,face="bold"), 
+        axis.text    = element_text(size = 22),
+        axis.text.x = element_blank(),
+        axis.line.x = element_line(color="black"),
+        axis.line.y = element_line(color="black"),
+        strip.text.x = element_text(size = 22)   )
+    
+  })
+  output$dd_graph_G <- renderPlot({
+    
+    dd_g4()
+    
+  })
+  kozak <- reactive({
+    
+    nm <- varnames()
+    dados <- rawData()
+    
+    validate(
+      need(dados, "Por favor faça o upload da base de dados"),
+      need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
+      need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
+      need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
+    
+    if(input$grah_arvore_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- NULL
+    }
+    
+    curva_arvore_media(df = dados, d = nm$di, dap = nm$dap, h = nm$hi, ht = nm$ht, facet = grupo)
+    
+  })
+  output$graph_kozak <- renderPlot({
+    
+    kozak()
+    
+  })
+  
+
+  
+  
+  
   })
 
 

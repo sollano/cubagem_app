@@ -225,7 +225,7 @@ shinyUI(
                                   sidebarPanel(
                                     h3("Variaveis para graficos de classe de diametro"),
                                     h4("Intervalo de classe"),
-                                    numericInput("int.classe.dap", "Insira o intervalo de classe:", 2, 1, 50, 0.5),
+                                    numericInput("int.classe.dap", "Insira o intervalo de classe:", 5, 1, 50, 0.5),
                                     
                                     h4("Diâmetro mínimo"),
                                     numericInput("diam.min", "Insira o diâmetro mínimo:", 5, 1, 100, 1),
@@ -324,14 +324,29 @@ shinyUI(
                               fluidPage(
                                 h1("Análise descritiva", style = "text-align: center;"),
                                 br(),
+                                
+                                fluidRow(
+                                  
+                                  column(3,
+                                         radioButtons("grah_arvore_estrato",
+                                                      "Gerar árvore média por estrato?",
+                                                      c("Sim"=TRUE,"Nao"=FALSE), inline = TRUE),offset = 9
+                                  )
+                                ),
+                                
+                                fluidRow(
+                                
                                 tabsetPanel(
                                   
-                                  tabPanel("Tabela da distribuição diamétrica"                   , DT::dataTableOutput("dd_geral_tab") ),
-                                  tabPanel("Gráfico dos indivíduos por ha por classe diamétrica" , plotOutput("dd_graph_indv",height = "550px") ),
-                                  tabPanel("Gráfico do volume por ha por classe diamétrica"      , plotOutput("dd_graph_vol" ,height = "550px"))
+                                  tabPanel("Tabela da distribuição diamétrica"                 , DT::dataTableOutput("dd_geral_tab") ),
+                                  tabPanel("Gráfico do Nº de indivíduos por classe diamétrica" , plotOutput("dd_graph_indv",height = "550px") ),
+                                  tabPanel("Gráfico de VCC por classe diamétrica"              , plotOutput("dd_graph_vcc",height = "550px") ),
+                                  tabPanel("Gráfico de VSC por classe diamétrica"              , plotOutput("dd_graph_vsc",height = "550px") ),
+                                  tabPanel("Gráfico de G por classe diamétrica"                , plotOutput("dd_graph_G",height = "550px") ),
+                                  tabPanel("Gráfico da forma média das árvores"                , plotOutput("graph_kozak" ,height = "550px", width = "700px" ))
 
                                 )
-                                
+                                )
                               )
                               
                      ), # tabPanel DD 
