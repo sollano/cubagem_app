@@ -1,0 +1,449 @@
+options(java.parameters = "-Xss2048k")
+library(shiny)
+suppressPackageStartupMessages(library(DT))
+#library(plotly)
+library(formattable)
+library(readxl)
+#library(plyr)
+library(tibble)
+library(tidyr)
+suppressPackageStartupMessages(library(dplyr))
+library(lazyeval)
+suppressPackageStartupMessages(library(ggplot2))
+library(ggthemes)
+suppressPackageStartupMessages(library(xlsx))
+library(rJava)
+library(xlsxjars)
+library(rmarkdown)
+
+
+shinyUI(
+  # Intro, taglists e error messages colors ####
+  tagList(tags$style(HTML(".irs-single, .irs-bar-edge, .irs-bar{background: #00a90a}")), # this is actually .css; this changes the color for the sliders
+          
+          # Cor de todas as mensagens da funcao need
+          tags$head(
+            tags$style(HTML("
+                            .shiny-output-error-validation {
+                            color: #00a90a;
+                            }
+                            "))
+            ),
+          
+          # cor das mensagens que eu especificar com "WRONG"
+          tags$head(
+            tags$style(HTML("
+                            .shiny-output-error-WRONG {
+                            color: red;
+                            }
+                            "))
+            ),
+          
+          # cor das mensagens que eu especificar com "AVISO"
+          tags$head(
+            tags$style(HTML("
+                            .shiny-output-error-AVISO {
+                            color: orange;
+                            }
+                            "))
+            ),
+          
+          
+          
+          
+          navbarPage("App Cubagem",
+                     
+                     theme = "green_yeti2.css",
+                     # theme = "green.css", # seleciona um tema contido na pasta www
+                     # theme = shinythemes::shinytheme("paper"), # seleciona um tema utilizando pacote
+                     
+                     # Painel Intro ####          
+                     tabPanel( "Intro" ,
+                               fluidRow(
+                                 column(5,
+                                        includeMarkdown("about.md")
+                                 ),
+                                 column(6,
+                                        img(contentType = "image/jpg",
+                                            src="intro_picture.jpg",
+                                            width = 770,
+                                            #           height = 750)
+                                            height = 856)
+                                        
+                                 )
+                               ) # fluid row
+                     ), # Painel Intro             
+                     
+                     
+                     # Upload de dados ####
+                     tabPanel("Importação",
+                              sidebarLayout(
+                                
+                                sidebarPanel(
+                                  
+                                  h3("Dados"),
+                                  
+                                  radioButtons("df_select", 
+                                               "Fazer o upload de um arquivo, ou utilizar o dado de exemplo?", 
+                                               c("Fazer o upload", 
+                                                 "Utilizar o dado de exemplo de Smalian", 
+                                                 "Utilizar o dado de exemplo de Huber"), 
+                                               selected = "Fazer o upload"),
+                                  
+                                  uiOutput("upload"), # tipos de arquivos aceitos
+                                  hr(),
+                                  uiOutput("upload_csv"), # tipos de arquivos aceitos
+                                  uiOutput("upload_xlsx") # tipos de arquivos aceitos
+                                  
+                                  
+                                ), # sidebarPanel
+                                
+                                mainPanel(
+                                  DT::dataTableOutput("rawdata")
+                                ) # mainPanel
+                              ) # sidebarLayout
+                     ),
+                     
+                     # Mapeamento ####
+                     tabPanel("Mapeamento de variáveis",
+                              fluidPage(
+                                
+                                #h1("Shiny", span("Widgets Gallery", style = "font-weight: 300"), 
+                                h1("Definição dos nomes das variáveis", 
+                                   style = "text-align: center;"),
+                                br(),
+                                
+                                #  h4("Nesta aba serão indicados os nomes das colunas que serão utilizadas nas análises em todo o app"),
+                                fluidRow(
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Diâmetro da seção"),
+                                           p("Selecione o nome da variável referente à Diâmetro da seção:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_di")
+                                         )),
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Altura da seção"),
+                                           p("Selecione o nome da variável referente à Altura da seção:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_hi")
+                                         )),
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Espessura da casca"),
+                                           p("Selecione o nome da variável referente à Espessura da casca:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_e_casca")
+                                         ))
+                                  
+                                  
+                                ), # fluidRow 1
+                                
+                                fluidRow(
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Comprimento da seção"),
+                                           p("Selecione o nome da variável referente à comprimento da seção"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_comp_secao")
+                                         )), # Coluna altura dominante
+                                  
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Diâmetro (DAP)"),
+                                           p("Selecione o nome da variável referente à DAP:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_dap")
+                                         )), # Coluna dap
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Altura total"),
+                                           p("Selecione o nome da variável referente à Altura total:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_ht")
+                                         )) # Coluna ht
+                                  
+                                  
+                                  
+                                ),# fluidRow 2
+                                
+                                fluidRow(
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Árvore"),
+                                           p("Selecione o nome da variável referente à Árvore:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_arvore")
+                                         )), # Coluna area.total
+                                  
+                                  
+                                  column(4,
+                                         wellPanel(
+                                           h3("Estrato"),
+                                           p("Selecione o nome da variável referente à Estrato:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_estrato")
+                                         )) # Coluna area.total
+                                    )
+                                
+                              ) # fluidPage 
+                              
+                              
+                     ),# tabPanel Mapeamento
+                     
+                     # tabPanel Preparação ####
+                     tabPanel("Preparação dos dados", 
+                              
+                              
+                              fluidPage(
+                                
+                                fluidRow(
+                                  
+                                  h1("Preparação dos dados",style = "text-align: center;"),
+                                  br()
+                                ),
+                                
+                                
+                                fluidRow(
+                                  
+                                  sidebarPanel(
+                                    h3("Variaveis para graficos de classe de diametro"),
+                                    h4("Intervalo de classe"),
+                                    numericInput("int.classe.dap", "Insira o intervalo de classe:", 2, 1, 50, 0.5),
+                                    
+                                    h4("Diâmetro mínimo"),
+                                    numericInput("diam.min", "Insira o diâmetro mínimo:", 5, 1, 100, 1),
+                                    
+                                    h3("Converter diâmetro da seção de milímetro para centímetro?"),
+                                    radioButtons("di_to_cm","Marcar 'Sim' caso o diametro da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = "Nao", inline = TRUE),
+                                    
+                                    h3("Converter altura da seção de centímetro para metro?"),
+                                    radioButtons("hi_to_m","Marcar 'Sim' caso a altura da seção esteja em centímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = "Nao", inline = TRUE),
+                              
+                                    h3("Converter espessura da seção de milímetro para centímetro?"),
+                                    radioButtons("e_casca_to_cm","Marcar 'Sim' caso a espessura da casca da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = "Nao", inline = TRUE),
+ 
+                                    h3("Qual método de cálculo de volume deve ser utilizado na modelagem volumétrica?"),
+                                    radioButtons("mod_vol","",c("Smalian","Huber"), inline = TRUE),
+                                                                       
+                                    h3("Transformar zero em NA"),
+                                    radioButtons("zero_to_NA","Transformar zeros em variávies numéricas em NA? (recomendado)",c("Sim"=TRUE,"Nao"=FALSE), inline = TRUE),
+                                    
+                                    h3("Remover dados"),
+                                    
+                                    uiOutput("rm_data_var"),
+                                    uiOutput("rm_data_level"),
+                                    uiOutput("rm_vars"),
+                                    uiOutput("selec_area_parcela_num"),
+                                    uiOutput("selec_area_total_num"),
+                                    uiOutput("est_hd1"),
+                                    uiOutput("est_hd2"),
+                                    uiOutput("est_hd3"),
+                                    uiOutput("ajust_ht"),
+                                    uiOutput("ui_estvol1"),
+                                    uiOutput("ui_estvol3"),
+                                    uiOutput("ui_estvol4"),
+                                    uiOutput("consist_warning1")
+                                    
+                                    
+                                    
+                                  ),# sidebarPanel
+                                  
+                                  mainPanel( tabsetPanel(
+                                    tabPanel("Dado pos preparação",
+                                             shiny::htmlOutput("avisos_prep"),
+                                             DT::dataTableOutput("prep_table"),
+                                             hr(),
+                                             plotOutput(""),
+                                             hr(),
+                                             uiOutput("ajust_ht_title"),
+                                             plotOutput("ht_plot"),
+                                             hr(),
+                                             tableOutput("teste")
+                                             
+                                    ),
+                                    tabPanel("Dados inconsistentes",
+                                             uiOutput("consist_warning2"),
+                                             uiOutput("consist_table_help"),
+                                             uiOutput("consist_choice"),
+                                             DT::dataTableOutput("consist_table")
+                                    )
+                                    
+                                  ))# mainPanel
+                                  
+                                  
+                                )
+                                
+                              )
+                              
+                              
+                              
+                              
+                     ), # tabPanel filtrar dados
+                     # tabPanel cálculo do volume ####
+                     tabPanel("cálculo do volume",
+                              
+                              fluidPage(
+                                
+                                h1("Cálculo do volume", style = "text-align: center;"),
+                                br(),
+                                
+                                fluidRow(   
+                                  tabsetPanel(
+                                    tabPanel("Volume pelo método de Smalian",DT::dataTableOutput("acs") ), 
+                                    tabPanel("Volume pelo método de Huber",DT::dataTableOutput("ace1"),br(),DT::dataTableOutput("ace2") ), 
+                                    tabPanel("Totalização das árvores",DT::dataTableOutput("tot_parc_tab") ) 
+                                  )
+                                )
+                              )
+                     ),# TabPanel cálculo do volume
+                     
+                     
+                     
+                     # tabPanel Analise descritiva ####
+                     tabPanel("Analise descritiva",
+                              
+                              fluidPage(
+                                h1("Análise descritiva", style = "text-align: center;"),
+                                br(),
+                                tabsetPanel(
+                                  
+                                  tabPanel("Tabela da distribuição diamétrica"                   , DT::dataTableOutput("dd_geral_tab") ),
+                                  tabPanel("Gráfico dos indivíduos por ha por classe diamétrica" , plotOutput("dd_graph_indv",height = "550px") ),
+                                  tabPanel("Gráfico do volume por ha por classe diamétrica"      , plotOutput("dd_graph_vol" ,height = "550px"))
+
+                                )
+                                
+                              )
+                              
+                     ), # tabPanel DD 
+                     
+                     # tabPanel Ajuste de Modelos Volumétricos ####
+                     tabPanel("Ajuste de Modelos Volumétricos",
+                              
+                              fluidPage(
+                                
+                                h1("Ajuste de Modelos Volumétricos", style = "text-align: center;"),
+                                br(),
+                                
+                                fluidRow(   
+                                  tabsetPanel(
+                                    tabPanel("Voln",DT::dataTableOutput("") ), 
+                                    tabPanel("Volu",DT::dataTableOutput(""),br(),DT::dataTableOutput("ac") ), 
+                                    tabPanel("Tota",DT::dataTableOutput("tot") ) 
+                                  )
+                                )
+                              )
+                     ),# Ajuste de Modelos Volumétricos
+                     
+                     
+                     
+                     
+                     # navbarMenu  Download ####
+                     tabPanel("Download",
+                              # Painel Download Tabelas ####
+                              
+                              fluidPage(
+                                
+                                
+                                h1("Download dos resultados", style = "text-align: center;"),
+                                br(),
+                                
+                                
+                                tabsetPanel(
+                                  tabPanel("Download de tabelas", 
+                                           fluidPage(
+                                             
+                                             
+                                             h2("Download de tabelas", style = "text-align: center;"),
+                                             br(),
+                                             
+                                             fluidRow(
+                                               column(
+                                                 10
+                                                 ,uiOutput("checkbox_df_download")
+                                               )
+                                               
+                                             ),
+                                             br(),
+                                             
+                                             fluidRow(column(3,downloadButton('downloadData', 'Baixar tabelas selecionadas'), offset=4)),
+                                             br(),
+                                             h3("Ou, para baixar todas as tabelas disponíveis, clique abaixo:"),
+                                             fluidRow(
+                                               column(3,downloadButton('downloadAllData', 'Baixar todas as tabelas'), offset=4)
+                                             )
+                                             
+                                             
+                                             
+                                           )
+                                  ), # download tabelas
+                                  
+                                  # Painel Download Graficos ####
+                                  
+                                  tabPanel("Download de graficos", 
+                                           
+                                           
+                                           
+                                           sidebarLayout(
+                                             
+                                             sidebarPanel(
+                                               
+                                               tags$style(type="text/css",
+                                                          ".recalculating {opacity: 1.0;}"
+                                               ),
+                                               
+                                               h3("Download de graficos"),
+                                               
+                                               selectInput("graph_d", "Escolha uma grafico:", 
+                                                           choices = c(
+                                                             "Indv. por ha por CC",
+                                                             "Vol. por ha por CC",
+                                                             "G por ha por CC",
+                                                             "Indv. por ha por classe de ht",
+                                                             "Frequencia para var. Qualidade",
+                                                             "Porcentagem para var. Qualidade",
+                                                             "Residuos em porcentagem para modelos de HT"
+                                                           )),
+                                               
+                                               selectInput("graphformat",
+                                                           "Escolha o formato do gráfico:",
+                                                           choices = c("PNG" = ".png",
+                                                                       "JPG" = ".jpg",
+                                                                       "PDF" = ".pdf") ),
+                                               
+                                               downloadButton('downloadGraph', 'Download')
+                                               
+                                             ),
+                                             mainPanel(
+                                               plotOutput("graph_d_out",height = "550px")
+                                             )
+                                           )
+                                  ) # download graficos
+                                  
+                                )       
+                              ) # fluidPage
+                     ) # final navbarMenu download ####    
+                     # final da UI  ####    
+          ) # navbarPage
+            )#tagList
+            ) # ShinyUI
+
+
+
