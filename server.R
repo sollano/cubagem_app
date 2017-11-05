@@ -1,4 +1,3 @@
-print("aaaa")
 options(java.parameters = "-Xss2048k")
 library(shiny)
 suppressPackageStartupMessages(library(DT))
@@ -21,18 +20,20 @@ library(rmarkdown)
 
 ex1 <- read.csv2("examples/exemplo_smalian.csv")
 ex2 <- read.csv2("examples/exemplo_huber.csv")
-source("funs/smaliancc.R"      , encoding="UTF-8")
-source("funs/smaliansc.R"      , encoding="UTF-8")
-source("funs/hubercc.R"        , encoding="UTF-8")
-source("funs/hubersc.R"        , encoding="UTF-8")
-source("funs/round_df.R"       , encoding="UTF-8")
-source("funs/classe_diametro.R", encoding="UTF-8")
-source("funs/htdapratio.R"     , encoding="UTF-8")
-source("funs/consistency.R"    , encoding="UTF-8")
-source("funs/xlsx.write.list.R", encoding="UTF-8")
-source("funs/lm_table.R"       , encoding="UTF-8")
-source("funs/inv.R"            , encoding="UTF-8")
-source("funs/residuos_exp.R"   , encoding="UTF-8")
+source("funs/smaliancc.R"         , encoding="UTF-8")
+source("funs/smaliansc.R"         , encoding="UTF-8")
+source("funs/hubercc.R"           , encoding="UTF-8")
+source("funs/hubersc.R"           , encoding="UTF-8")
+source("funs/round_df.R"          , encoding="UTF-8")
+source("funs/classe_diametro.R"   , encoding="UTF-8")
+source("funs/htdapratio.R"        , encoding="UTF-8")
+source("funs/consistency.R"       , encoding="UTF-8")
+source("funs/xlsx.write.list.R"   , encoding="UTF-8")
+source("funs/lm_table.R"          , encoding="UTF-8")
+source("funs/inv.R"               , encoding="UTF-8")
+source("funs/residuos_exp.R"      , encoding="UTF-8")
+source("funs/cub_summary.R"       , encoding="UTF-8")
+source("funs/curva_arvore_media.R", encoding="UTF-8")
 
 
 # Funcao para testar se uma variavel e numerica
@@ -81,7 +82,7 @@ shinyServer(function(input, output, session){
                    "Tipo da base de dados:", 
                    choices = c("Dados em nivel de secao",
                                "Dados em nivel de arvore"),
-                   selected = "Dados em nivel de arvore"),
+                   selected = "Dados em nivel de secao"),
       
       
       radioButtons("df_extension", 
@@ -255,7 +256,7 @@ shinyServer(function(input, output, session){
     data <- rawData_()
     
     selectizeInput( # cria uma lista de opcoes em que o usuario pode clicar
-      "col.di_cc", # Id
+      "col.hi", # Id
       "Caso o dado não possua uma coluna de volume, este pode ser calculado na aba 'Preparação' ", # nome que sera mostrado na UI
       choices = names(data), # como as opcoes serao atualizadas de acordo com o arquivo que o usuario insere, deixamos este campo em branco
       selected = hi_names,     
@@ -560,119 +561,10 @@ shinyServer(function(input, output, session){
       # Converter zero em NA quando a variavel tiver o seu nome definido
       if(nm$dap!=""){  data[nm$dap][ data[nm$dap] == 0 ] <- NA }
       if(nm$ht!= ""){  data[nm$ht ][ data[nm$ht ] == 0 ] <- NA }
-    }
-    
-    # Estimar HD
-    if(is.null(input$est.hd) || is.null(input$col.estrato ) || input$col.estrato =="" || is.na(input$col.estrato ) || is.null(input$col.ht ) || input$col.ht =="" || is.na(input$col.ht ) || is.na(input$col.dap) || input$col.dap=="" || is.null(input$col.dap) ){
-      
-      
-    }else if(is.null(input$col.hd) || input$col.hd=="" || is.na(input$col.hd) ){
-      
-      # esse if tem que ser separado do de cima, se nao da erro(sabe-se la por que)
-      if(input$est.hd){
-        
-        data <- hdjoin(
-          df     =  data,
-          grupos =  nm$estrato, 
-          HT     =  nm$ht, 
-          DAP    =  nm$dap,
-          OBS    =  nm$obs,
-          dom    =  nm$cod.dom )  %>% 
-          select(HD, everything() )
-      }
-    }
-    
-    # Estimar altura caso altura seja selecionada e possua NAs, ou seja, arvores nao medidas
-    # Esse se evita mensagens de erro quando as colunas nao forem selecionadas
-    if( is.null(input$col.ht) || input$col.ht=="" || is.na(input$col.ht) || is.na(input$col.dap) || input$col.dap=="" || is.null(input$col.dap) ||   is.null(input$modelo_est_ht) || input$modelo_est_ht=="" || is.na(input$modelo_est_ht) ){
-      
-      
-    }else if( nm$ht!="" && any(is.na(data[[nm$ht]])) ){
-      
-      if(input$modelo_est_ht ==  "LN(HT) = b0 + b1 * 1/DAP + e" ){
-        
-        modelo_ht <- paste( "log(", nm$ht, ") ~ inv(", nm$dap ,")"  )
-        
-      }else if(input$modelo_est_ht ==  "LN(HT) = b0 + b1 * LN(DAP) + e" ){
-        
-        modelo_ht <- paste( "log(", nm$ht, ") ~ log(", nm$dap ,")"  )
-        
-      }else if(input$modelo_est_ht ==  "LN(HT) = b0 + b1 * 1/DAP + b2 * LN(HD) + e" ){
-        
-        modelo_ht <- paste( "log(", nm$ht, ") ~ inv(", nm$dap ,") + ", "log(", nm$hd ,")" )
-      }
-      
-      
-      data <- data %>%  
-        lm_table(modelo_ht,output = "est" ) %>% 
-        mutate( HT_EST = ifelse(is.na( .data[[nm$ht]] ), est, .data[[nm$ht]] ) ) %>% 
-        select(HT_EST, everything(), -est )
+      if(nm$di!= ""){  data[nm$di ][ data[nm$di ] == 0 ] <- NA }
+      if(nm$hi!= ""){  data[nm$hi ][ data[nm$hi ] == 0 ] <- NA }
       
     }
-    
-    
-    
-    # A seguir e feito o calculo do volume, caso o usuario nao insira uma variavel de volume e as variaveis necessarias para o calculo
-    if( is.null(input$modelo_estvol) ||  is.null(input$col.dap)  || is.null(input$b0_estvol) || is.null(input$b1_estvol) || is.na(input$modelo_estvol) ||  is.na(input$col.dap)  || is.na(input$b0_estvol) || is.na(input$b1_estvol) || input$modelo_estvol =="" || input$col.dap ==""  || input$b0_estvol == "" || input$b1_estvol == ""  ){
-      
-      # esse if acima so foi feito dessa forma pois tentar adicionar ! nas condicoes acima
-      # nao funcionou, por algum motivo.
-      # portanto foi utilizado um if vazio com a condicao oposta a desejada,
-      # e o resultado esperado dentro do else.
-    }else{
-      
-      if(input$modelo_estvol == "LN(VFCC) = b0 + b1 * 1/DAP + e"){
-        data$VOL <- exp( input$b0_estvol + 1/data[[input$col.dap]] * input$b1_estvol )
-        data <- data %>% select(VOL, everything())
-      }
-      
-      if(input$modelo_estvol == "VFCC = b0 + b1 * DAP + e"){
-        data$VOL <- input$b0_estvol + data[[input$col.dap]] * input$b1_estvol
-        data <- data %>% select(VOL, everything())
-      }
-      
-      if(input$modelo_estvol == "VFCC = b0 + b1 * DAP² + e"){
-        data$VOL <- input$b0_estvol + data[[input$col.dap]]^2 * input$b1_estvol
-        data <- data %>% select(VOL, everything())
-      }
-      
-      if(input$modelo_estvol == "VFCC = b0 + b1 * DAP + b2 * DAP² + e"){
-        data$VOL <- input$b0_estvol + data[[input$col.dap]] * input$b1_estvol + data[[input$col.dap]]^2 * input$b2_estvol
-        data <- data %>% select(VOL, everything())
-      }
-      
-      if(input$modelo_estvol == "VFCC = b0 + b1 * LN(DAP) + e"){
-        data$VOL <- input$b0_estvol + log(data[[input$col.dap]]) * input$b1_estvol
-        data <- data %>% select(VOL, everything())
-        
-      }
-      
-      
-      # modelos com b2 e ht precisam de mais uma condicao
-      if( is.null(input$modelo_estvol) ||  is.null(input$col.ht)  ||  is.na(input$col.ht) || is.null(nm$ht.est)  ||  is.na(nm$ht.est) || is.na(input$b2_estvol) || input$col.ht ==""  || input$b2_estvol == "" ){
-        
-      }else if(input$modelo_estvol == "LN(VFCC) = b0 + b1 * LN(DAP) + b2 * LN(HT) + e"){
-        data$VOL <- exp( input$b0_estvol + log(data[[input$col.dap]]) * input$b1_estvol + log(data[[nm$ht.est]]) * input$b2_estvol )
-        data <- data %>% select(VOL, everything())
-        
-      }else  if(input$modelo_estvol == "VFCC = b0 + b1 * DAP + b2 * HT + e"){
-        data$VOL <- input$b0_estvol + data[[input$col.dap]] * input$b1_estvol + data[[nm$ht.est]] * input$b2_estvol
-        data <- data %>% select(VOL, everything())
-      }else if(input$modelo_estvol == "VFCC = b0 * DAP^b1 * HT^b2 + e"){
-        data$VOL <- input$b0_estvol * data[[input$col.dap]] ^ input$b1_estvol * data[[nm$ht.est]] ^ input$b2_estvol
-        data <- data %>% select(VOL, everything())
-      }
-      
-      
-    }
-    
-    # A seguir e feito o calculo da estrutura vertical, caso o usuario nao tenha inserido uma variavel referente a mesma, e selecione que desja calcular
-    if(!is.null(input$est.vert.calc) && !is.na(input$est.vert.calc) && input$est.vert.calc=="Sim"){
-      
-      data <- estrat_vert_souza(data, input$col.ht)
-      
-    }
-    
     
     # O if a seguir sera para remover linhas inconsistentes selecionadas pelo usuario
     
@@ -699,57 +591,7 @@ shinyServer(function(input, output, session){
     data
     
   })
-  
-  # Graficos de altura
-  ht_graph <- reactive({
-    
-    req(input$col.ht, input$col.dap, !is.null(rawData()) )
-    
-    data <- rawData()
-    nm <- varnames()
-    
-    if(is.null(input$col.ht) || is.na(input$col.ht) || input$col.ht=="" ){
-      
-      
-    }else if( !any(is.na(data[[input$col.ht]])) ) {
-      return()
-    }
-    
-    data <- data %>%  filter( !is.na(.data[[nm$ht]]) )
-    
-    # Tentar Ajustar os modelos utilizando try, e salvar em uma lista,
-    # junto com a altura observada
-    lista <- list(
-      data[!is.na(data[nm$ht]), nm$ht,drop=F],
-      "LN(HT) = b0 + b1 * 1/DAP + e"               = try(lm_table(data, paste( "log(", nm$ht, ") ~ inv(", nm$dap ,")"  )                       , output = "est" )[["est"]], silent = T),
-      "LN(HT) = b0 + b1 * LN(DAP) + e"             = try(lm_table(data, paste( "log(", nm$ht, ") ~ log(", nm$dap ,")"  )                       , output = "est" )[["est"]], silent = T),
-      "LN(HT) = b0 + b1 * 1/DAP + b2 * LN(HD) + e" = try(lm_table(data, paste( "log(", nm$ht, ") ~ inv(", nm$dap ,") + ", "log(", nm$hd ,")" ) , output = "est" )[["est"]], silent = T)
-    )
-    
-    # Criar um dataframe apenas com os modelos que ajustaram
-    data2 <- as.data.frame(do.call(cbind,lista[!sapply(lista, is, "try-error")]))
-    
-    # Criar os graficos
-    # suppressWarnings evita avisos quando um dos modelos nao for ajustado
-    suppressWarnings(
-      
-      residuos_exp(data2, 
-                   nm$ht, 
-                   "LN(HT) = b0 + b1 * 1/DAP + e", 
-                   "LN(HT) = b0 + b1 * LN(DAP) + e",
-                   "LN(HT) = b0 + b1 * 1/DAP + b2 * LN(HD) + e", ncol = 2 )
-      
-    )
-    
-    
-  })
-  output$ht_plot <- renderPlot({
-    
-    ht_graph()
-    
-  })
-  
-  
+
   # render
   output$prep_table <- DT::renderDataTable({
     
@@ -804,19 +646,21 @@ shinyServer(function(input, output, session){
   # Set names ####
   varnames <- reactive({
     
-    #req(input$col.especies,input$col.parcelas, input$col.dap,input$col.ht,input$col.vcc, input$col.vsc,input$col.area.parcela,input$col.area.total, input$col.col.estrato,  input$col.est.vertical,input$col.est.interna)
-    
+
     varnameslist <- list(
-      di           = input$col.di,
-      hi           = input$col.hi,
-      e_casca      = input$e_casca,
-      comp_secao   = input$comp_secao,
-      dap          = input$col.dap,
-      ht           = input$col.ht,
-      arvore       = input$col.parcelas,
-      estrato      = input$col.estrato,
-      IC.dap       = input$int.classe.dap,
-      diam.min     = input$diam.min
+      di            = input$col.di,
+      hi            = input$col.hi,
+      e_casca       = input$col.e_casca,
+      comp_secao    = input$col.comp_secao,
+      dap           = input$col.dap,
+      ht            = input$col.ht,
+      arvore        = input$col.arvore,
+      estrato       = input$col.estrato,
+      IC.dap        = input$int.classe.dap,
+      diam.min      = input$diam.min,
+      di_to_cm      = input$di_to_cm,
+      hi_to_m       = input$hi_to_m,
+      e_casca_to_cm = input$e_casca_to_cm
     )
 
     
@@ -927,7 +771,201 @@ shinyServer(function(input, output, session){
   
   
   
-})
+  
+  # Calculo de volume ####
+  
+  vol_smalian <- reactive({
+    
+    nm <- varnames()
+    dados <- rawData()
+    
+    validate(
+      need(dados, "Por favor faça o upload da base de dados"),
+      need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
+      need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
+      need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
+    
+     if(nm$estrato != ""){
+      group_arv <- c(nm$estrato, nm$arvore)
+      
+    }else{
+      group_arv <- nm$arvore
+      
+    }
+    
+    tab <- smaliancc(
+      df          = dados,
+      di          = nm$di, 
+      hi          = nm$hi, 
+      .groups     = group_arv,
+      di_mm_to_cm = nm$di_to_cm,
+      hi_cm_to_m  = nm$hi_to_m)
+    
+    if(nm$e_casca != ""){
+      tab <- smaliansc(
+        df          = tab,
+        di          = nm$di, 
+        hi          = nm$hi, 
+        es          = nm$e_casca,
+        .groups     = group_arv,
+        di_mm_to_cm = nm$di_to_cm,
+        hi_cm_to_m  = nm$hi_to_m,
+        es_mm_to_cm = nm$e_casca_to_cm)
+      
+    }
+
+    tab
+    
+  })
+  output$tab_smalian <- DT::renderDataTable({
+    
+    data <- round_df(vol_smalian(), input$calc_vol_cd)
+    
+    datatable( data,
+               rownames = F,
+               options = list(searching = FALSE,
+                              paging=FALSE,
+                              ordering=FALSE,
+                              initComplete = JS(
+                                "function(settings, json) {",
+                                "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
+                                "}")
+               )
+    )
+    
+    
+  })
+  
+  vol_huber <- reactive({
+    
+    nm <- varnames()
+    dados <- rawData()
+    
+    validate(
+      need(dados, "Por favor faça o upload da base de dados"),
+      need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
+      need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
+      need(nm$comp_secao,"Por favor mapeie a coluna referente a 'comprimento da secao'  "))
+    
+    if(nm$estrato != ""){
+      group_arv <- c(nm$estrato, nm$arvore)
+      
+    }else{
+      group_arv <- nm$arvore
+      
+    }
+    
+    tab <- hubercc(
+      df          = dados,
+      di          = nm$di, 
+      comp_secao  = nm$comp_secao, 
+      .groups     = group_arv,
+      di_mm_to_cm = nm$di_to_cm)
+    
+    if(nm$e_casca != ""){
+      tab <- hubersc(
+        df          = tab,
+        di          = nm$di, 
+        comp_secao  = nm$comp_secao, 
+        es          = nm$e_casca,
+        .groups     = group_arv,
+        di_mm_to_cm = nm$di_to_cm,
+        es_mm_to_cm = nm$e_casca_to_cm)
+      
+    }
+    
+    tab
+    
+  })
+  output$tab_huber <- DT::renderDataTable({
+    
+    data <- round_df(vol_huber(), input$calc_vol_cd)
+    
+    datatable( data,
+               rownames = F,
+               options = list(searching = FALSE,
+                              paging=FALSE,
+                              ordering=FALSE,
+                              initComplete = JS(
+                                "function(settings, json) {",
+                                "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
+                                "}")
+               )
+    )
+    
+    
+  })
+  
+  vol_arvore <- reactive({
+    
+    nm <- varnames()
+    
+
+    # Switch que troca o dado que sera utilizado com base na selecao do usuario, na ui
+    dados <- switch(input$data_vol_summary,
+                    "Smalian" = vol_smalian(),
+                    "Huber"   = vol_huber()  )
+    
+    validate(
+      need(dados, "Por favor faça o calculo do volume utilizando o método desejado"),
+      need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
+      need(nm$dap,"Por favor mapeie a coluna referente a 'DAP'  "),
+      need(nm$ht,"Por favor mapeie a coluna referente a 'Altura'  "))
+    
+    # Utiliza o estrato no grupo, caso ele seja selecionado
+    if(nm$estrato != ""){
+      group_arv <- c(nm$estrato, nm$arvore)
+      
+    }else{
+      group_arv <- nm$arvore
+      
+    }
+
+    # Utiliza o volume com casca, caso seja calculado
+    if(suppressWarnings(is.null(dados$VSC))){
+      vsc_name <- ""
+      
+    }else{
+      vsc_name <- "VSC"
+      
+    }
+    
+    tab <- cub_summary(
+      df = dados, 
+      dap = nm$dap, 
+      ht = nm$ht,
+      vcc = "VCC", 
+      vsc = vsc_name, 
+      .groups = group_arv)
+    
+  })
+  output$tab_vol_arvore <- DT::renderDataTable({
+    
+    data <- round_df(vol_arvore(), input$calc_vol_cd)
+    
+    datatable( data,
+               rownames = F,
+               options = list(searching = FALSE,
+                              paging=FALSE,
+                              ordering=FALSE,
+                              initComplete = JS(
+                                "function(settings, json) {",
+                                "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
+                                "}")
+               )
+    )
+    
+    
+  })
+
+  
+  
+  
+  
+  
+  
+  
+  })
 
 
 

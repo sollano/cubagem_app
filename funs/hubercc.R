@@ -46,5 +46,6 @@ hubercc <- function(df, di, comp_secao, .groups, di_mm_to_cm=FALSE){
           ),
           nm=c("AS_CC", "VCC")
         )
-    )
+    ) %>% 
+    ungroup
 }

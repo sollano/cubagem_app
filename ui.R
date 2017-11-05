@@ -231,13 +231,13 @@ shinyUI(
                                     numericInput("diam.min", "Insira o diâmetro mínimo:", 5, 1, 100, 1),
                                     
                                     h3("Converter diâmetro da seção de milímetro para centímetro?"),
-                                    radioButtons("di_to_cm","Marcar 'Sim' caso o diametro da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = "Nao", inline = TRUE),
+                                    radioButtons("di_to_cm","Marcar 'Sim' caso o diametro da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE, inline = TRUE),
                                     
                                     h3("Converter altura da seção de centímetro para metro?"),
-                                    radioButtons("hi_to_m","Marcar 'Sim' caso a altura da seção esteja em centímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = "Nao", inline = TRUE),
+                                    radioButtons("hi_to_m","Marcar 'Sim' caso a altura da seção esteja em centímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE, inline = TRUE),
                               
-                                    h3("Converter espessura da seção de milímetro para centímetro?"),
-                                    radioButtons("e_casca_to_cm","Marcar 'Sim' caso a espessura da casca da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = "Nao", inline = TRUE),
+                                    h3("Converter espessura da casca de milímetro para centímetro?"),
+                                    radioButtons("e_casca_to_cm","Marcar 'Sim' caso a espessura da casca da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = TRUE, inline = TRUE),
  
                                     h3("Qual método de cálculo de volume deve ser utilizado na modelagem volumétrica?"),
                                     radioButtons("mod_vol","",c("Smalian","Huber"), inline = TRUE),
@@ -250,15 +250,6 @@ shinyUI(
                                     uiOutput("rm_data_var"),
                                     uiOutput("rm_data_level"),
                                     uiOutput("rm_vars"),
-                                    uiOutput("selec_area_parcela_num"),
-                                    uiOutput("selec_area_total_num"),
-                                    uiOutput("est_hd1"),
-                                    uiOutput("est_hd2"),
-                                    uiOutput("est_hd3"),
-                                    uiOutput("ajust_ht"),
-                                    uiOutput("ui_estvol1"),
-                                    uiOutput("ui_estvol3"),
-                                    uiOutput("ui_estvol4"),
                                     uiOutput("consist_warning1")
                                     
                                     
@@ -269,11 +260,6 @@ shinyUI(
                                     tabPanel("Dado pos preparação",
                                              shiny::htmlOutput("avisos_prep"),
                                              DT::dataTableOutput("prep_table"),
-                                             hr(),
-                                             plotOutput(""),
-                                             hr(),
-                                             uiOutput("ajust_ht_title"),
-                                             plotOutput("ht_plot"),
                                              hr(),
                                              tableOutput("teste")
                                              
@@ -304,11 +290,27 @@ shinyUI(
                                 h1("Cálculo do volume", style = "text-align: center;"),
                                 br(),
                                 
+                                fluidRow(
+                                  column( 3,  sliderInput("calc_vol_cd", 
+                                                          label = "Selecione o numero de casas decimais:", 
+                                                          min = 1, 
+                                                          max = 9, 
+                                                          value = 4,
+                                                          step = 1)),
+                                  
+                                  column(3,
+                                         radioButtons("data_vol_summary",
+                                                      "Método de volume que deve ser utilizado:",
+                                                      c("Smalian","Huber"), inline = TRUE)
+                                  )
+                                ),
+                                
                                 fluidRow(   
                                   tabsetPanel(
-                                    tabPanel("Volume pelo método de Smalian",DT::dataTableOutput("acs") ), 
-                                    tabPanel("Volume pelo método de Huber",DT::dataTableOutput("ace1"),br(),DT::dataTableOutput("ace2") ), 
-                                    tabPanel("Totalização das árvores",DT::dataTableOutput("tot_parc_tab") ) 
+                                    tabPanel("Volume pelo método de Smalian",DT::dataTableOutput("tab_smalian") ), 
+                                    tabPanel("Volume pelo método de Huber",DT::dataTableOutput("tab_huber") ), 
+                                    tabPanel("Totalização das árvores",DT::dataTableOutput("tab_vol_arvore") ),
+                                    selected="Totalização das árvores"
                                   )
                                 )
                               )

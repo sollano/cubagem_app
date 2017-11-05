@@ -64,5 +64,6 @@ hubersc <- function(df, di, comp_secao, es, .groups, di_mm_to_cm=FALSE, es_mm_to
           ),
           nm=c("di_sc","AS_SC", "VSC")
         )
-    )
+    ) %>% 
+    ungroup
 }
