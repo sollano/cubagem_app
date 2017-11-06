@@ -773,7 +773,6 @@ shinyServer(function(input, output, session){
   
   
   
-  
   # Calculo de volume ####
   
   vol_smalian <- reactive({
