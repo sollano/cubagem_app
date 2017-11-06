@@ -93,11 +93,11 @@ residuos_exp <- function (df, obs, ..., type = "scatterplot",point_size = 3,colo
       legend.position = legend_pos,
       panel.grid.major = ggplot2::element_blank(), 
       panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_blank(), 
-      axis.title = ggplot2::element_text(size = 26, face="bold"), 
+      axis.title = ggplot2::element_text(size = 24, face="bold"), 
       axis.text = ggplot2::element_text(size = 22), 
       axis.line.x = ggplot2::element_line(color = "black"), 
       axis.line.y = ggplot2::element_line(color = "black"), 
-      strip.text.x = ggplot2::element_text(size = 20, face = "bold"),
+      strip.text.x = ggplot2::element_text(size = 18, face = "bold"),
       legend.text = ggplot2::element_text(size=20), 
       legend.title = ggplot2::element_text(size=20) ) + 
     ggplot2::guides(
