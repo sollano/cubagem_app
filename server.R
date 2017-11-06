@@ -453,55 +453,6 @@ shinyServer(function(input, output, session){
     
   })
 
-    # Estimar altura
-  output$ajust_ht_title <- renderUI({
-    
-    # precisa que o usuario tenha NAs na coluna de altura
-    data <- rawData_()
-    #req( any(is.na(data[[input$col.ht]])) )
-    
-    if(is.null(input$col.ht) || is.na(input$col.ht) || input$col.ht=="" ){
-      
-    }else if( !any(is.na(data[[input$col.ht]])) ) {
-      return()
-    }
-    
-    h3("Resíduos em porcentagem para os modelos hipsométricos",style = "text-align: center;")
-    
-    
-  })
-  output$ajust_ht <- renderUI({
-    
-    # precisa que o usuario tenha NAs na coluna de altura
-    data <- rawData_()
-    #req( any(is.na(data[[input$col.ht]])) )
-    
-    if(is.null(input$col.ht) || is.na(input$col.ht) || input$col.ht=="" ){
-      
-    }else if( !any(is.na(data[[input$col.ht]])) ) {
-      return()
-    }
-    
-    list(
-      
-      h3("Estimar altura das árvores não medidas"),
-      
-      h5("A altura será estimada utilizando um dos modelos hipsométricos abaixo. Resíduos para todos os modelos disponíveis são demonstrados graficamente ao lado:"),
-      
-      radioButtons("modelo_est_ht",
-                   label = "Selecione o modelo para ser utilizado:",
-                   choices = c(
-                     "LN(HT) = b0 + b1 * 1/DAP + e",
-                     "LN(HT) = b0 + b1 * LN(DAP) + e",
-                     "LN(HT) = b0 + b1 * 1/DAP + b2 * LN(HD) + e"
-                     
-                   ) )      
-      
-      
-    )
-    
-  })
-  
   # tabela
   # rawData sera o dado utilizado durante o resto do app
   # as alteracoes feitas em 'preparacao' serao salvas aqui
@@ -694,7 +645,7 @@ shinyServer(function(input, output, session){
       check_numeric(input$col.ht, data, "ht")  )
     
     #htdapratio(data, dap = input$col.dap, ht = input$col.ht) 
-    consistency(data, dap = input$col.dap, ht = input$col.ht, parcela = input$col.parcelas) 
+    consistency(data, dap = input$col.dap, ht = input$col.ht) 
   })
   output$consist_warning1 <- renderUI({
     # Essa aviso ira aparcer na UI caso consit_fun() nao seja nulo.
@@ -763,17 +714,7 @@ shinyServer(function(input, output, session){
     
     
   })
-  
-  
-  
-  
-  
 
-  
-  
-  
-  
-  
   # Calculo de volume ####
   
   vol_smalian <- reactive({

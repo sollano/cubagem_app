@@ -242,9 +242,6 @@ shinyUI(
                                     h3("Converter espessura da casca de milímetro para centímetro?"),
                                     radioButtons("e_casca_to_cm","Marcar 'Sim' caso a espessura da casca da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = TRUE, inline = TRUE),
  
-                                    h3("Qual método de cálculo de volume deve ser utilizado na modelagem volumétrica?"),
-                                    radioButtons("mod_vol","",c("Smalian","Huber"), inline = TRUE),
-                                                                       
                                     h3("Transformar zero em NA"),
                                     radioButtons("zero_to_NA","Transformar zeros em variávies numéricas em NA? (recomendado)",c("Sim"=TRUE,"Nao"=FALSE), inline = TRUE),
                                     
