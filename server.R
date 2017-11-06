@@ -826,8 +826,8 @@ shinyServer(function(input, output, session){
     datatable( data,
                rownames = F,
                options = list(searching = FALSE,
-                              paging=FALSE,
-                              ordering=FALSE,
+                              paging=TRUE,
+                              ordering=TRUE,
                               initComplete = JS(
                                 "function(settings, json) {",
                                 "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
@@ -886,8 +886,8 @@ shinyServer(function(input, output, session){
     datatable( data,
                rownames = F,
                options = list(searching = FALSE,
-                              paging=FALSE,
-                              ordering=FALSE,
+                              paging=TRUE,
+                              ordering=TRUE,
                               initComplete = JS(
                                 "function(settings, json) {",
                                 "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
@@ -949,7 +949,7 @@ shinyServer(function(input, output, session){
                rownames = F,
                options = list(searching = FALSE,
                               paging=FALSE,
-                              ordering=FALSE,
+                              ordering=TRUE,
                               initComplete = JS(
                                 "function(settings, json) {",
                                 "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
@@ -960,15 +960,30 @@ shinyServer(function(input, output, session){
     
   })
 
+  # A partir daqui, o dado sera utilizado sera pelo switch dados_nivel_arvore ####
+  
+  dados_nivel_arvore <- reactive({
+    
+    req(input$df)
+    
+    # Se o dado for em nivel de arvore, a totalização de parcelas deve ser feita para que
+    # NewData possa ser inserido em acs. Sem essa condição a ui gera mensagens de erro
+    switch(input$df, 
+           "Dados em nivel de secao" = if(is.null(vol_arvore()) ){return()}else{ vol_arvore()},
+           "Dados em nivel de arvore" = rawData() )
+    
+    
+  })
+  
   # Distribuicoes e graficos ####
   
   dd_list <- reactive({
     
     nm <- varnames()
-    dados <- vol_arvore()
+    dados <- dados_nivel_arvore()
     
     validate(
-      need(dados, "Por favor faça o cálculo do volume"),
+      need(dados, "Por favor faça o cálculo do volume ou o upload de uma base de dados em nível de arvore"),
       need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  ") )
     
     lista <- list()
@@ -1165,10 +1180,10 @@ shinyServer(function(input, output, session){
   ajuste_vol <- reactive({
     
     nm <- varnames()
-    dados <- vol_arvore()
+    dados <- dados_nivel_arvore()
     
     validate(
-      need(dados, "Por favor faça o cálculo do volume"),
+      need(dados, "Por favor faça o cálculo do volume ou o upload de uma base de dados em nível de arvore"),
       need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  "),
       need(nm$ht,"Por favor mapeie a coluna referente a 'ht'  ")
       )
@@ -1249,10 +1264,10 @@ shinyServer(function(input, output, session){
   ajuste_vol_tab_est <- reactive({
     
     nm <- varnames()
-    dados <- vol_arvore()
+    dados <- dados_nivel_arvore()
     
     validate(
-      need(dados, "Por favor faça o cálculo do volume"),
+      need(dados, "Por favor faça o cálculo do volume ou o upload de uma base de dados em nível de arvore"),
       need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  "),
       need(nm$ht,"Por favor mapeie a coluna referente a 'ht'  ")
     )
@@ -1403,7 +1418,7 @@ shinyServer(function(input, output, session){
     }
 
     if("Totalizacao do volume" %in% input$dataset ) {
-      L[["Totalizacao do volume"]] <-  try(vol_arvore(), silent = T)
+      L[["Totalizacao do volume"]] <-  try(dados_nivel_arvore(), silent = T)
     }
     
     if("Distribuicao diametrica" %in% input$dataset ) {
@@ -1425,7 +1440,7 @@ shinyServer(function(input, output, session){
     L[["Dado utilizado"]]       <-  try(rawData(), silent = T)
     L[["Vol. por secao Smalian"]] <- try(vol_smalian(), silent = T)
     L[["Vol. por secao Huber"]] <- try(vol_huber(), silent = T)
-    L[["Totalizacao do volume"]] <- try(vol_arvore(), silent = T)
+    L[["Totalizacao do volume"]] <- try(dados_nivel_arvore(), silent = T)
     L[["Distribuicao diametrica"]] <-  try(dd_list()[["dd_geral"]], silent=T)
     L[["Tabela de coeficientes"]] <- try(ajuste_vol(), silent=T)
     L
