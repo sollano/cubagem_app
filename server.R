@@ -1003,7 +1003,6 @@ shinyServer(function(input, output, session){
     
     lista
   })
-  
   output$dd_geral_tab <- DT::renderDataTable({
     
     g <- round_df(dd_list()[["dd_geral"]], 2)
@@ -1159,15 +1158,9 @@ shinyServer(function(input, output, session){
     kozak()
     
   })
-  
 
-  
-  
-  
-  
   # Ajuste modelos de volume ####
-  
-  
+
   ajuste_vol <- reactive({
     
     nm <- varnames()
@@ -1189,13 +1182,16 @@ shinyServer(function(input, output, session){
     # Ajustar modelo de schummacher
     tab <- bind_rows(
       lm_table(df=dados,modelo = log(VCC) ~  log(DAP) + log(HT), grupo ) %>% 
-        mutate(Modelo = "Schummacher  & Hall com casca" ),
+        mutate(Nome = "Schummacher  & Hall com casca",
+               Modelo = "LN(VCC) = b0 + b1*LN(DAP) + b2*LN(HT) + e" ),
 
       lm_table(df=dados,modelo = log(VCC) ~  log(DAP), grupo )%>% 
-        mutate(Modelo = "Husch com casca" ),
+        mutate(Nome = "Husch com casca",
+               Modelo = "LN(VCC) = b0 + b1*LN(DAP) + e" ),
       
       lm_table(df=dados,modelo = log(VCC) ~  log(pow(DAP,2)*HT), grupo )%>% 
-        mutate(Modelo = "Spurr com casca" )
+        mutate(Nome = "Spurr com casca",
+               Modelo = "LN(VCC) = b0 + b1*LN(DAP²*HT) + e" )
       
       
     )
@@ -1204,13 +1200,16 @@ shinyServer(function(input, output, session){
       
       tab <- bind_rows(tab,
                    lm_table(df=dados,modelo = log(VSC) ~  log(DAP) + log(HT), grupo ) %>% 
-                     mutate(Modelo = "Schummacher & Hall sem casca" ),
+                     mutate(Nome = "Schummacher & Hall sem casca",
+                            Modelo = "LN(VSC) = b0 + b1*LN(DAP) + b2*LN(HT) + e" ),
                    
                    lm_table(df=dados,modelo = log(VSC) ~  log(DAP), grupo )%>% 
-                     mutate(Modelo = "Husch sem casca" ),
+                     mutate(Nome = "Husch sem casca",
+                            Modelo = "LN(VSC) = b0 + b1*LN(DAP) + e" ),
                    
                    lm_table(df=dados,modelo = log(VSC) ~  log(pow(DAP,2)*HT), grupo )%>% 
-                     mutate(Modelo = "Spurr sem casca" )
+                     mutate(Nome = "Spurr sem casca",
+                            Modelo = "LN(VSC) = b0 + b1*LN(DAP²*HT) + e" )
                    
                    )
     }
@@ -1220,18 +1219,18 @@ shinyServer(function(input, output, session){
     
     if(input$ajuste_p_estrato){
       
-      tab <- tab %>% arrange(!!rlang::sym(grupo), Modelo) %>% select(!!rlang::sym(grupo), Modelo, everything())
+      tab <- tab %>% arrange(!!rlang::sym(grupo), Nome) %>% select(!!rlang::sym(grupo), Nome, Modelo, everything())
       
     }else{
-      tab <-  tab %>% arrange(Modelo) %>% select(Modelo, everything()) 
+      tab <-  tab %>% arrange(Nome) %>% select(Nome, Modelo, everything()) 
     }
    
     tab
      
   })
   output$ajuste_vol_tab <- DT::renderDataTable({
-    
-    datatable( ajuste_vol(),
+    g <- round_df(ajuste_vol(), 8)
+    datatable( g,
                rownames = F,
                options = list(searching = FALSE,
                               paging=FALSE,
@@ -1245,9 +1244,7 @@ shinyServer(function(input, output, session){
     
     
   })
-  
-  
-  
+ 
   ajuste_vol_tab_est <- reactive({
     
     nm <- varnames()
@@ -1311,13 +1308,11 @@ shinyServer(function(input, output, session){
       
     }
     
-    tab
+    na.omit(tab)
     
     
   })
-  
-  
-  
+
   output$graph_res_vcc_scatterplot <- renderPlot({
     g <- ajuste_vol_tab_est()
     residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot" )
@@ -1355,8 +1350,7 @@ shinyServer(function(input, output, session){
     
     
   })
-  
-  
+
   # ####
   
   })
