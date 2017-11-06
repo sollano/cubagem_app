@@ -54,7 +54,7 @@ shinyUI(
           
           
           
-          navbarPage("App Cubagem",
+          navbarPage("App Cubagem (BETA)",
                      
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
