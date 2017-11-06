@@ -18,6 +18,8 @@ library(rJava)
 library(xlsxjars)
 library(rmarkdown)
 
+# UI ####
+
 shinyUI(
   # Intro, taglists e error messages colors ####
   tagList(tags$style(HTML(".irs-single, .irs-bar-edge, .irs-bar{background: #00a90a}")), # this is actually .css; this changes the color for the sliders
