@@ -1313,45 +1313,197 @@ shinyServer(function(input, output, session){
     
   })
 
-  output$graph_res_vcc_scatterplot <- renderPlot({
+  vcc_scatter <- reactive({
     g <- ajuste_vol_tab_est()
     residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot" )
-    
-    
   })
-  output$graph_res_vcc_histogram <- renderPlot({
+  output$graph_res_vcc_scatterplot <- renderPlot({
+    vcc_scatter()
+  })
+  
+  vcc_hist <- reactive({
     g <- ajuste_vol_tab_est()
     residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve" )
-    
-    
   })
-  output$graph_res_vcc_versus <- renderPlot({
+  output$graph_res_vcc_histogram <- renderPlot({
+    vcc_hist()
+  })
+  
+  vcc_versus <- reactive({
     g <- ajuste_vol_tab_est()
     residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "versus" )
+  })
+  output$graph_res_vcc_versus <- renderPlot({
+    vcc_versus()
+  })
+  
+  vsc_scatter <- reactive({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot" )
+  })
+  output$graph_res_vsc_scatterplot <- renderPlot({
+    vsc_scatter()
+  })
+  
+  vsc_hist <- reactive({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve" )
+  })
+  output$graph_res_vsc_histogram <- renderPlot({
+    vsc_hist()
+  })
+  
+  vsc_versus <- reactive({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus" )
+  })
+  output$graph_res_vsc_versus <- renderPlot({
+  vsc_versus()
+  })
+
+
+  
+  # Download tabelas ####
+  
+  output$checkbox_df_download <- renderUI({
+    
+    checkboxGroupInput("dataset", h3("Escolha uma ou mais tabelas, e clique no botão abaixo:"), 
+                       choices =  c(
+                         "Dados inconsistentes"    ,
+                         "Dado utilizado"          ,
+                         "Vol. por secao Smalian"  ,
+                         "Vol. por secao Huber"    ,
+                         "Totalizacao do volume"   ,
+                         "Distribuicao diametrica" ,
+                         "Tabela de coeficientes" 
+                         ), inline = T )
     
     
   })
   
-  output$graph_res_vsc_scatterplot <- renderPlot({
-    g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot" )
+  list_of_df_to_download <- reactive({
     
+    L <- list()
     
-  })
-  output$graph_res_vsc_histogram <- renderPlot({
-    g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve" )
+    if("Dados inconsistentes" %in% input$dataset ) {
+      L[["Dados inconsistentes"]] <- try( consist_fun(), silent = T) 
+    }
     
-    
-  })
-  output$graph_res_vsc_versus <- renderPlot({
-    g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus" )
-    
-    
-  })
+    if("Dado utilizado" %in% input$dataset ) {
+      L[["Dado utilizado"]] <-  try(rawData(), silent = T)
+    }
 
+    if("Vol. por secao Smalian" %in% input$dataset ) {
+      L[["Vol. por secao Smalian"]] <-  try(vol_smalian(), silent = T)
+    }
+    
+    if("Vol. por secao Huber" %in% input$dataset ) {
+      L[["Vol. por secao Huber"]] <-  try(vol_huber(), silent = T)
+    }
+
+    if("Totalizacao do volume" %in% input$dataset ) {
+      L[["Totalizacao do volume"]] <-  try(vol_arvore(), silent = T)
+    }
+    
+    if("Distribuicao diametrica" %in% input$dataset ) {
+      L[["Distribuicao diametrica"]] <-  try(dd_list()[["dd_geral"]], silent=T)
+    }
+    
+    if("Tabela de coeficientes" %in% input$dataset ) {
+      L[["Tabela de coeficientes"]] <-  try(ajuste_vol(), silent = T)
+    }
+
+    L
+    
+  })
+  list_of_df_all <- reactive({
+    
+    L <- list()
+    
+    L[["Dados inconsistentes"]] <- try( consist_fun(), silent = T) 
+    L[["Dado utilizado"]]       <-  try(rawData(), silent = T)
+    L[["Vol. por secao Smalian"]] <- try(vol_smalian(), silent = T)
+    L[["Vol. por secao Huber"]] <- try(vol_huber(), silent = T)
+    L[["Totalizacao do volume"]] <- try(vol_arvore(), silent = T)
+    L[["Distribuicao diametrica"]] <-  try(dd_list()[["dd_geral"]], silent=T)
+    L[["Tabela de coeficientes"]] <- try(ajuste_vol(), silent=T)
+    L
+    
+  })
+  
+  output$downloadData <- downloadHandler(
+    filename = function(){"tabelas_app_cubagem.xlsx"},
+    
+    content = function(file){xlsx.write.list(file, list_of_df_to_download() )}
+    
+  )
+  
+  output$downloadAllData <- downloadHandler(
+    filename = function(){"tabelas_app_cubagem.xlsx"},
+    
+    content = function(file){xlsx.write.list(file, list_of_df_all() )}
+    
+  )
+  
+  # Download graficos ####
+  
+  graphInput <- reactive({
+    switch(input$graph_d,
+           "Indviduos por CC"            = dd_g1(),
+           "VCC por CC"                  = dd_g2(),
+           "VSC por CC"                  = dd_g3(),
+           "G por CC"                    = dd_g4(),
+           "Forma media das arvores"     = kozak(),
+           "Dispersao dos residuos VCC"  = vcc_scatter(),
+           "Histograma dos residuos VCC" = vcc_hist(),
+           "Obs vs est VCC"              = vcc_versus(),
+           "Dispersao dos residuos VSC"  = vsc_scatter(),
+           "Histograma dos residuos VSC" = vsc_hist(),
+           "Obs vs est VSC"              = vsc_versus()         
+    )
+  })
+  
+  output$graph_d_out <- renderPlot({
+    
+    g <- graphInput()
+    
+    g
+    
+    
+  }) 
+  
+  output$downloadGraph <- downloadHandler(
+    filename = function() { 
+      
+      if(input$graphformat==".png")
+      {
+        paste(input$graph_d, '.png', sep='') 
+      }
+      else if(input$graphformat==".jpg")
+      {
+        paste(input$graph_d, '.jpg', sep='') 
+      }
+      else if(input$graphformat==".pdf")
+      {
+        paste(input$graph_d, '.pdf', sep='') 
+      }
+      
+    },
+    
+    content = function(file) {
+      
+      ggsave(file, graphInput(), width = 12, height = 6 )
+      
+      
+    }
+  )
+  # session end ####
+  # session$onSessionEnded(function() {
+  #  stopApp()
+  #  q("no")
+  #})
   # ####
+  
   
   })
 

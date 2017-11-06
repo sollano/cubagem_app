@@ -437,13 +437,17 @@ shinyUI(
                                                
                                                selectInput("graph_d", "Escolha uma grafico:", 
                                                            choices = c(
-                                                             "Indv. por ha por CC",
-                                                             "Vol. por ha por CC",
-                                                             "G por ha por CC",
-                                                             "Indv. por ha por classe de ht",
-                                                             "Frequencia para var. Qualidade",
-                                                             "Porcentagem para var. Qualidade",
-                                                             "Residuos em porcentagem para modelos de HT"
+                                                             "Indviduos por CC",
+                                                             "VCC por CC",
+                                                             "VSC por CC",
+                                                             "G por CC",
+                                                             "Forma media das arvores",
+                                                             "Dispersao dos residuos VCC",
+                                                             "Histograma dos residuos VCC",
+                                                             "Obs vs est VCC",
+                                                             "Dispersao dos residuos VSC",
+                                                             "Histograma dos residuos VSC",
+                                                             "Obs vs est VSC"
                                                            )),
                                                
                                                selectInput("graphformat",
