@@ -16,7 +16,7 @@ library(rJava)
 library(xlsxjars)
 library(rmarkdown)
 
-# Carregar dados de exemplo e funcoes
+# Carregar dados de exemplo e funcoes ####
 
 ex1 <- read.csv2("examples/exemplo_smalian.csv")
 ex2 <- read.csv2("examples/exemplo_huber.csv")
@@ -34,6 +34,7 @@ source("funs/inv.R"               , encoding="UTF-8")
 source("funs/residuos_exp.R"      , encoding="UTF-8")
 source("funs/cub_summary.R"       , encoding="UTF-8")
 source("funs/curva_arvore_media.R", encoding="UTF-8")
+source("funs/pow.R"               , encoding="UTF-8")
 
 
 # Funcao para testar se uma variavel e numerica
@@ -66,7 +67,7 @@ DAP_names <- c("DAP","Dap","dap", "dbh", "Dbh","DBH","DBH_11")
 HT_names <- c("HT", "Ht", "ht","Htot","ALTURA","Altura","Altura_Total", "ALTURA_TOTAL")
 arvore_names <- c("arvore", "ARVORE", "arv.", "ARVORES", "arvores", "Arvore", "Arvores")
 estratos_names <- c("TALHAO", "Talhao", "talhao","COD_TALHAO","Cod_Talhao","cod_talhao", "COD.TALHAO", "Cod.Talhao","cod.talhao", "area.code", "Area.Code","AREA.CODE", "area_code","Area_Code","AREA_CODE")
-
+# Server ####
 shinyServer(function(input, output, session){
   
   # Importação ####
@@ -377,7 +378,7 @@ shinyServer(function(input, output, session){
                    selected = estratos_names,
                    multiple = T,
                    options = list(
-                     maxItems = 1,
+                    # maxItems = 1,
                      placeholder = 'Selecione uma coluna abaixo:'#,
                      #    onInitialize = I('function() { this.setValue(""); }')
                    ) # options    
@@ -958,15 +959,6 @@ shinyServer(function(input, output, session){
     
   })
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
   # Distribuicoes e graficos ####
   
   dd_list <- reactive({
@@ -1153,7 +1145,7 @@ shinyServer(function(input, output, session){
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
       need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
     
-    if(input$grah_arvore_estrato){
+    if(input$graph_arvore_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- NULL
@@ -1171,6 +1163,201 @@ shinyServer(function(input, output, session){
 
   
   
+  
+  
+  # Ajuste modelos de volume ####
+  
+  
+  ajuste_vol <- reactive({
+    
+    nm <- varnames()
+    dados <- vol_arvore()
+    
+    validate(
+      need(dados, "Por favor faça o cálculo do volume"),
+      need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  "),
+      need(nm$ht,"Por favor mapeie a coluna referente a 'ht'  ")
+      )
+    
+    # Ajustar por estrato caso o usuário deseje
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
+    
+    # Ajustar modelo de schummacher
+    tab <- bind_rows(
+      lm_table(df=dados,modelo = log(VCC) ~  log(DAP) + log(HT), grupo ) %>% 
+        mutate(Modelo = "Schummacher  & Hall com casca" ),
+
+      lm_table(df=dados,modelo = log(VCC) ~  log(DAP), grupo )%>% 
+        mutate(Modelo = "Husch com casca" ),
+      
+      lm_table(df=dados,modelo = log(VCC) ~  log(pow(DAP,2)*HT), grupo )%>% 
+        mutate(Modelo = "Spurr com casca" )
+      
+      
+    )
+    # Se o Volume sem casca for calculado, ajustar modelo sem casca
+    if(suppressWarnings(!is.null(dados$VSC))){
+      
+      tab <- bind_rows(tab,
+                   lm_table(df=dados,modelo = log(VSC) ~  log(DAP) + log(HT), grupo ) %>% 
+                     mutate(Modelo = "Schummacher & Hall sem casca" ),
+                   
+                   lm_table(df=dados,modelo = log(VSC) ~  log(DAP), grupo )%>% 
+                     mutate(Modelo = "Husch sem casca" ),
+                   
+                   lm_table(df=dados,modelo = log(VSC) ~  log(pow(DAP,2)*HT), grupo )%>% 
+                     mutate(Modelo = "Spurr sem casca" )
+                   
+                   )
+    }
+    
+    # Organizar a tabela
+    tab <- 
+    
+    if(input$ajuste_p_estrato){
+      
+      tab <- tab %>% arrange(!!rlang::sym(grupo), Modelo) %>% select(!!rlang::sym(grupo), Modelo, everything())
+      
+    }else{
+      tab <-  tab %>% arrange(Modelo) %>% select(Modelo, everything()) 
+    }
+   
+    tab
+     
+  })
+  output$ajuste_vol_tab <- DT::renderDataTable({
+    
+    datatable( ajuste_vol(),
+               rownames = F,
+               options = list(searching = FALSE,
+                              paging=FALSE,
+                              ordering=TRUE,
+                              initComplete = JS(
+                                "function(settings, json) {",
+                                "$(this.api().table().header()).css({'background-color': '#00a90a', 'color': '#fff'});",
+                                "}")
+               )
+    )
+    
+    
+  })
+  
+  
+  
+  ajuste_vol_tab_est <- reactive({
+    
+    nm <- varnames()
+    dados <- vol_arvore()
+    
+    validate(
+      need(dados, "Por favor faça o cálculo do volume"),
+      need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  "),
+      need(nm$ht,"Por favor mapeie a coluna referente a 'ht'  ")
+    )
+    
+    # Ajustar por estrato caso o usuário deseje
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
+    
+    tab <- tibble(
+      
+      "VCC" = dados %>% pull(VCC),
+      
+      "Schummacher & Hall com casca" = dados %>% 
+        lm_table(modelo = log(VCC) ~  log(DAP) + log(HT), 
+                  grupo,
+                  output = "est" ) %>% pull("est"),
+      
+      "Husch com casca" = dados %>% 
+        lm_table( modelo = log(VCC) ~  log(DAP), 
+                  grupo,
+                  output = "est" ) %>% pull("est"),
+      
+      "Spurr com casca" = dados %>% 
+        lm_table( modelo = log(VCC) ~  log(pow(DAP,2)*HT), 
+                  grupo,
+                  output = "est" ) %>% pull("est")
+    )
+    
+    if(suppressWarnings(!is.null(dados$VSC))){
+      
+      tab <- tab %>% 
+        mutate(
+          "VSC" = dados %>% pull(VSC),
+          
+          "Schummacher & Hall sem casca" = dados %>% 
+            lm_table(modelo = log(VSC) ~  log(DAP) + log(HT), 
+                     grupo,
+                     output = "est" ) %>% pull("est"),
+          
+          "Husch sem casca" = dados %>% 
+            lm_table( modelo = log(VSC) ~  log(DAP), 
+                      grupo,
+                      output = "est" ) %>% pull("est"),
+          
+          "Spurr sem casca" = dados %>% 
+            lm_table( modelo = log(VSC) ~  log(pow(DAP,2)*HT), 
+                      grupo,
+                      output = "est" ) %>% pull("est") 
+          
+        )
+      
+    }
+    
+    tab
+    
+    
+  })
+  
+  
+  
+  output$graph_res_vcc_scatterplot <- renderPlot({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot" )
+    
+    
+  })
+  output$graph_res_vcc_histogram <- renderPlot({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve" )
+    
+    
+  })
+  output$graph_res_vcc_versus <- renderPlot({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "versus" )
+    
+    
+  })
+  
+  output$graph_res_vsc_scatterplot <- renderPlot({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot" )
+    
+    
+  })
+  output$graph_res_vsc_histogram <- renderPlot({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve" )
+    
+    
+  })
+  output$graph_res_vsc_versus <- renderPlot({
+    g <- ajuste_vol_tab_est()
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus" )
+    
+    
+  })
+  
+  
+  # ####
   
   })
 

@@ -97,7 +97,7 @@ residuos_exp <- function (df, obs, ..., type = "scatterplot",point_size = 3,colo
       axis.text = ggplot2::element_text(size = 22), 
       axis.line.x = ggplot2::element_line(color = "black"), 
       axis.line.y = ggplot2::element_line(color = "black"), 
-      strip.text.x = ggplot2::element_text(size = 15, face = "bold"),
+      strip.text.x = ggplot2::element_text(size = 20, face = "bold"),
       legend.text = ggplot2::element_text(size=20), 
       legend.title = ggplot2::element_text(size=20) ) + 
     ggplot2::guides(

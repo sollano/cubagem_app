@@ -328,7 +328,7 @@ shinyUI(
                                 fluidRow(
                                   
                                   column(3,
-                                         radioButtons("grah_arvore_estrato",
+                                         radioButtons("graph_arvore_estrato",
                                                       "Gerar árvore média por estrato?",
                                                       c("Sim"=TRUE,"Nao"=FALSE), inline = TRUE),offset = 9
                                   )
@@ -349,7 +349,7 @@ shinyUI(
                                 )
                               )
                               
-                     ), # tabPanel DD 
+                     ), # tabPanel AD 
                      
                      # tabPanel Ajuste de Modelos Volumétricos ####
                      tabPanel("Ajuste de Modelos Volumétricos",
@@ -358,16 +358,23 @@ shinyUI(
                                 
                                 h1("Ajuste de Modelos Volumétricos", style = "text-align: center;"),
                                 br(),
-                                
+                                fluidRow(
+                                  
+                                  column(3,
+                                         radioButtons("ajuste_p_estrato",
+                                                      "Ajustar modelos por estrato?",
+                                                      c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE,inline = TRUE),offset = 0
+                                  )
+                                ),
                                 fluidRow(   
                                   tabsetPanel(
-                                    tabPanel("Voln",DT::dataTableOutput("") ), 
-                                    tabPanel("Volu",DT::dataTableOutput(""),br(),DT::dataTableOutput("ac") ), 
-                                    tabPanel("Tota",DT::dataTableOutput("tot") ) 
+                                    tabPanel("Tabela de Coeficientes",DT::dataTableOutput("ajuste_vol_tab") ), 
+                                    tabPanel("Gráficos de resíduo para volume com casca",plotOutput("graph_res_vcc_scatterplot"), plotOutput("graph_res_vcc_histogram"), plotOutput("graph_res_vcc_versus") ),
+                                    tabPanel("Gráficos de resíduo para volume sem casca",plotOutput("graph_res_vsc_scatterplot"), plotOutput("graph_res_vsc_histogram"), plotOutput("graph_res_vsc_versus") )
+                                  ) 
                                   )
                                 )
-                              )
-                     ),# Ajuste de Modelos Volumétricos
+                              ),# Ajuste de Modelos Volumétricos
                      
                      
                      
