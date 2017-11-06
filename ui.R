@@ -1,3 +1,4 @@
+# Pacotes ####
 options(java.parameters = "-Xss2048k")
 library(shiny)
 suppressPackageStartupMessages(library(DT))
@@ -15,7 +16,6 @@ suppressPackageStartupMessages(library(xlsx))
 library(rJava)
 library(xlsxjars)
 library(rmarkdown)
-
 
 shinyUI(
   # Intro, taglists e error messages colors ####

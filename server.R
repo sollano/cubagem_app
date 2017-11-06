@@ -1,3 +1,4 @@
+# Pacotes ####
 options(java.parameters = "-Xss2048k")
 library(shiny)
 suppressPackageStartupMessages(library(DT))
