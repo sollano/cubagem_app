@@ -989,14 +989,13 @@ shinyServer(function(input, output, session){
       #   scale_y_continuous( expand=c(0,15) ) +
       ggthemes::theme_igray(base_family = "serif") +
       labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Nº de Individuos") + 
-      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      geom_text(aes(label = round(NumIndv,1) ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
       theme(
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
         axis.title   = element_text(size = 26,face="bold"), 
         axis.text    = element_text(size = 22),
-        axis.text.x = element_blank(),
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
@@ -1018,14 +1017,13 @@ shinyServer(function(input, output, session){
       #  scale_y_continuous( expand=c(0,15) ) +
       labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Volume com casca") + 
       ggthemes::theme_igray(base_family = "serif") +
-      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      geom_text(aes(label = round(VCC,1) ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
       theme(
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
         axis.title   = element_text(size = 26,face="bold"), 
         axis.text    = element_text(size = 22),
-        axis.text.x = element_blank(),
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
@@ -1045,14 +1043,13 @@ shinyServer(function(input, output, session){
       #  scale_y_continuous( expand=c(0,15) ) +
       labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Volume sem casca") + 
       ggthemes::theme_igray(base_family = "serif") +
-      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      geom_text(aes(label = round(VSC,1) ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
       theme(
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
         axis.title   = element_text(size = 26,face="bold"), 
         axis.text    = element_text(size = 22),
-        axis.text.x = element_blank(),
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
@@ -1072,7 +1069,7 @@ shinyServer(function(input, output, session){
       # scale_y_continuous( expand=c(0,15) ) +
       labs(x = "Centro de Classe de Diâmetro - CCD (cm)", y = "Área Basal (G)") + 
       ggthemes::theme_igray(base_family = "serif") +
-      geom_text(aes(label = CC ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
+      geom_text(aes(label = round(G,1) ), position = position_dodge(0.9), vjust = -0.3, size = 6 ) + 
       theme(
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
