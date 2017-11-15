@@ -8,22 +8,22 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
   }
   
   # se dap nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(dap) || is.null(dap) || is.na(dap) || dap == "" || is.null(df[dap]) ){  
+  if(  missing(dap) || is.null(dap) || is.na(dap) || dap == "" || is.null(df[[dap]]) ){  
     stop("dap not set", call. = F) 
   }
   
   # se ht nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(ht) || is.null(ht) || is.na(ht) || ht == "" || is.null(df[ht]) ){  
+  if(  missing(ht) || is.null(ht) || is.na(ht) || ht == "" || is.null(df[[ht]]) ){  
     stop("ht not set", call. = F) 
   }
   
   # se vcc nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(vcc) || is.null(vcc) || is.na(vcc) || vcc == "" || is.null(df[vcc]) ){  
+  if(  missing(vcc) || is.null(vcc) || is.na(vcc) || vcc == "" || is.null(df[[vcc]]) ){  
     stop("vcc not set", call. = F) 
   }
   
   # se vsc nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(vsc) || is.null(vsc) || is.na(vsc) || vsc == "" || is.null(df[vsc]) ){  
+  if(  missing(vsc) || is.null(vsc) || is.na(vsc) || vsc == "" || is.null(df[[vsc]]) ){  
     df[["VSC"]] <- NA 
     vsc <- "VSC"
   }
