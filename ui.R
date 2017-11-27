@@ -139,26 +139,26 @@ shinyUI(
                                   
                                   column(4,
                                          wellPanel(
-                                           h3("Espessura da casca"),
-                                           p("Selecione o nome da variável referente à Espessura da casca:"#, 
-                                             #style = "font-family: 'Source Sans Pro';"
-                                           ),
-                                           uiOutput("selec_e_casca")
-                                         ))
-                                  
-                                  
-                                ), # fluidRow 1
-                                
-                                fluidRow(
-                                  
-                                  column(4,
-                                         wellPanel(
                                            h3("Comprimento da seção"),
                                            p("Selecione o nome da variável referente à comprimento da seção"#, 
                                              #style = "font-family: 'Source Sans Pro';"
                                            ),
                                            uiOutput("selec_comp_secao")
-                                         )), # Coluna altura dominante
+                                         ))
+                                  
+                                  
+                                  
+                                ), # fluidRow 1
+                                
+                                fluidRow(
+                                  column(4,
+                                         wellPanel(
+                                           h3("Espessura da casca"),
+                                           p("Selecione o nome da variável referente à Espessura da casca:"#, 
+                                             #style = "font-family: 'Source Sans Pro';"
+                                           ),
+                                           uiOutput("selec_e_casca")
+                                         )),
                                   
                                   
                                   column(4,

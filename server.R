@@ -61,13 +61,15 @@ check_numeric <- function(input, df, code){
 
 # vectors for names ####
 
-di_names <- c("di", "di_cc","d")
-hi_names <- c("hi")
-e_casca_names <- c("e_casca","espessura_casca")
+di_names <- c("di", "di_cc","d", "di (mm)", "di(cm)" )
+hi_names <- c("hi", "hi (cm)", "hi (m)")
+e_casca_names <- c("e_casca","espessura_casca", "e_casca (mm)", "e_casca (cm)")
 comp_secao_names <- c("comp_secao")
-DAP_names <- c("DAP","Dap","dap", "dbh", "Dbh","DBH","DBH_11")
-HT_names <- c("HT", "Ht", "ht","Htot","ALTURA","Altura","Altura_Total", "ALTURA_TOTAL")
-arvore_names <- c("arvore", "ARVORE", "arv.", "ARVORES", "arvores", "Arvore", "Arvores")
+CAP_names <- c("CAP","Cap","cap", "cbh", "Cbh","CBH","CBH_11","CAP(cm)","CAP(cm)","Cap (cm)","Cap(cm)")
+DAP_names <- c("DAP","Dap","dap", "dbh", "Dbh","DBH","DBH_11","DAP(cm)","DAP(cm)","Dap (cm)","Dap(cm)")
+HT_names <- c("HT_EST", "HT", "Ht", "ht","Htot","ALTURA","Altura","Altura_Total", "ALTURA_TOTAL","HT (m)","HT(m)","Ht (m)","Ht(m)","Altura Total (m)","Altura total(m)")
+VCC_names <- c("VCC","Vcc", "vcc", "VOL", "Vol", "vol" ,"VOLUME", "Volume (m³)", "VOLUME (m³)", "VOL(m³)", "Volume(m³)", "VOLUME(m³)", "VOL(m³)")
+arvore_names <- c("ARVORE", "Arvore", "arvore", "ARV", "Arv", "arv", "ARV.", "Arv.", "arv.","NP","Np","np","Árvore","ÁRVORE","árvore" )
 estratos_names <- c("TALHAO", "Talhao", "talhao","COD_TALHAO","Cod_Talhao","cod_talhao", "COD.TALHAO", "Cod.Talhao","cod.talhao", "area.code", "Area.Code","AREA.CODE", "area_code","Area_Code","AREA_CODE")
 # Server ####
 shinyServer(function(input, output, session){
@@ -241,7 +243,7 @@ shinyServer(function(input, output, session){
     
     selectizeInput( # cria uma lista de opcoes em que o usuario pode clicar
       "col.di", # Id
-      "Caso o dado não possua uma coluna de volume, este pode ser calculado na aba 'Preparação' ", # nome que sera mostrado na UI
+      NULL, # nome que sera mostrado na UI
       choices = names(data), # como as opcoes serao atualizadas de acordo com o arquivo que o usuario insere, deixamos este campo em branco
       selected = di_names,     
       multiple=T,
@@ -260,7 +262,7 @@ shinyServer(function(input, output, session){
     
     selectizeInput( # cria uma lista de opcoes em que o usuario pode clicar
       "col.hi", # Id
-      "Caso o dado não possua uma coluna de volume, este pode ser calculado na aba 'Preparação' ", # nome que sera mostrado na UI
+      NULL, # nome que sera mostrado na UI
       choices = names(data), # como as opcoes serao atualizadas de acordo com o arquivo que o usuario insere, deixamos este campo em branco
       selected = hi_names,     
       multiple=T,
@@ -279,7 +281,7 @@ shinyServer(function(input, output, session){
     
     selectizeInput( # cria uma lista de opcoes em que o usuario pode clicar
       "col.e_casca", # Id
-      "Caso o dado não possua uma coluna de volume, este pode ser calculado na aba 'Preparação' ", # nome que sera mostrado na UI
+      NULL, # nome que sera mostrado na UI
       choices = names(data), # como as opcoes serao atualizadas de acordo com o arquivo que o usuario insere, deixamos este campo em branco
       selected = e_casca_names,     
       multiple=T,
@@ -299,7 +301,7 @@ shinyServer(function(input, output, session){
     
     selectizeInput( # cria uma lista de opcoes em que o usuario pode clicar
       "col.comp_secao", # Id
-      "Caso o dado não possua uma coluna de volume, este pode ser calculado na aba 'Preparação' ", # nome que sera mostrado na UI
+      "Obs: Variável obrigatória para dados cubados pelo método de huber", # nome que sera mostrado na UI
       choices = names(data), # como as opcoes serao atualizadas de acordo com o arquivo que o usuario insere, deixamos este campo em branco
       selected = comp_secao_names,     
       multiple=T,
@@ -519,6 +521,12 @@ shinyServer(function(input, output, session){
       if(nm$hi!= ""){  data[nm$hi ][ data[nm$hi ] == 0 ] <- NA }
       
     }
+    
+    # converter valores
+    if(is.null(nm$di)           || nm$di==""){}else if(nm$di_to_cm){data[[nm$di]]           <- data[[nm$di]]/10 }
+    if(is.null(nm$hi)           || nm$hi==""){}else if(nm$hi_to_m){data[[nm$hi]]            <- data[[nm$hi]]/10 }
+    if(is.null(nm$e_casca) || nm$e_casca==""){}else if(nm$e_casca_to_cm){data[[nm$e_casca]] <- data[[nm$e_casca]]/10 }
+    
     
     # O if a seguir sera para remover linhas inconsistentes selecionadas pelo usuario
     
@@ -740,20 +748,15 @@ shinyServer(function(input, output, session){
       df          = dados,
       di          = nm$di, 
       hi          = nm$hi, 
-      .groups     = group_arv,
-      di_mm_to_cm = nm$di_to_cm,
-      hi_cm_to_m  = nm$hi_to_m)
-    
+      .groups     = group_arv )
+
     if(nm$e_casca != ""){
       tab <- smaliansc(
         df          = tab,
         di          = nm$di, 
         hi          = nm$hi, 
         es          = nm$e_casca,
-        .groups     = group_arv,
-        di_mm_to_cm = nm$di_to_cm,
-        hi_cm_to_m  = nm$hi_to_m,
-        es_mm_to_cm = nm$e_casca_to_cm)
+        .groups     = group_arv )
       
     }
 
