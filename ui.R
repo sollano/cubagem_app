@@ -351,8 +351,8 @@ shinyUI(
                               
                      ), # tabPanel AD 
                      
-                     # tabPanel Ajuste de Modelos Volumétricos ####
-                     tabPanel("Ajuste de Modelos Volumétricos",
+                     # tabPanel Ajuste de modelos volumétricos ####
+                     tabPanel("Ajuste de modelos volumétricos",
                               
                               fluidPage(
                                 
