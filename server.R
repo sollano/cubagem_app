@@ -593,8 +593,6 @@ shinyServer(function(input, output, session){
     # e utilizado ! pois a condicao necessaria (que nao gera aviso) e que a variavel nao seja removida.
     # A cor da mensagem (laranja) e definada no argumento errorClass
     validate(
-      need(nrow(rawData())>0,
-           "Base de dados vazia"),
       need(! nm$dap %in% input$col.rm_vars, 
            "You just removed the 'dap' variable. This will prevent you from running some of the app's functions") , 
       need(! nm$ht %in% input$col.rm_vars, 
