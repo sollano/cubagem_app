@@ -38,7 +38,11 @@ source("funs/cub_summary.R"       , encoding="UTF-8")
 source("funs/curva_arvore_media.R", encoding="UTF-8")
 source("funs/pow.R"               , encoding="UTF-8")
 
+#notin
 
+`%notin%` <- function (x, y){
+  !(x %in% y)
+}
 # Funcao para testar se uma variavel e numerica
 # Sera utilizada dentro da funcao validate
 check_numeric <- function(input, df, code){
@@ -736,7 +740,7 @@ shinyServer(function(input, output, session){
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
       need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
     
-     if(nm$estrato != ""){
+     if(any(nm$estrato != "")){
       group_arv <- c(nm$estrato, nm$arvore)
       
     }else{
@@ -793,7 +797,7 @@ shinyServer(function(input, output, session){
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
       need(nm$comp_secao,"Por favor mapeie a coluna referente a 'comprimento da secao'  "))
     
-    if(nm$estrato != ""){
+    if(any(nm$estrato != "")){
       group_arv <- c(nm$estrato, nm$arvore)
       
     }else{
@@ -859,7 +863,7 @@ shinyServer(function(input, output, session){
       need(nm$ht,"Por favor mapeie a coluna referente a 'Altura'  "))
     
     # Utiliza o estrato no grupo, caso ele seja selecionado
-    if(nm$estrato != ""){
+    if(any(nm$estrato != "")){
       group_arv <- c(nm$estrato, nm$arvore)
       
     }else{
@@ -1176,7 +1180,12 @@ shinyServer(function(input, output, session){
     
     if(input$ajuste_p_estrato){
       
-      tab <- tab %>% arrange(!!rlang::sym(grupo), Nome) %>% select(!!rlang::sym(grupo), Nome, Modelo, everything())
+     # tab <- tab %>% arrange_at(vars(c(grupo, "Nome"))) %>% select_at(vars(c(grupo, "Nome", "Modelo")), everything() )
+
+      # Organiza
+      tab <- tab %>% arrange_at(vars(c(grupo, "Nome"))) 
+      # Traz pra frente (nao deu pra fazer com dplyr pois 'grupo' pode ter tamanho maior que 1)
+      tab <- tab[,c(which(colnames(tab) %in% c(grupo, "Nome", "Modelo") ),which(colnames(tab) %notin% c(grupo, "Nome", "Modelo") ))]
       
     }else{
       tab <-  tab %>% arrange(Nome) %>% select(Nome, Modelo, everything()) 
@@ -1216,8 +1225,10 @@ shinyServer(function(input, output, session){
     # Ajustar por estrato caso o usuário deseje
     if(input$ajuste_p_estrato){
       grupo <- nm$estrato
+      tibble()
     }else{
       grupo <- ""
+      tab <- tibble()
     }
     
     tab <- tibble(
@@ -1265,54 +1276,109 @@ shinyServer(function(input, output, session){
       
     }
     
+    if(is.null(nm$estrato) || any(nm$estrato=="") || input$ajuste_p_estrato==FALSE ){}else{ tab <- dados %>% ungroup %>% select_at(vars(nm$estrato[length(nm$estrato)])) %>% mutate_all(as.factor) %>% cbind(tab)  }
+    
     na.omit(tab)
     
     
   })
 
   vcc_scatter <- reactive({
+    nm <- varnames()
+    
+    # adicionar estrato como cor
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
+    
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot" )
+    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot",color = grupo[length(grupo)] )
   })
   output$graph_res_vcc_scatterplot <- renderPlot({
     vcc_scatter()
   })
   
   vcc_hist <- reactive({
+    nm <- varnames()
+    
+    # adicionar estrato como cor
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
+    
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve" )
+    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve",color = grupo[length(grupo)] )
   })
   output$graph_res_vcc_histogram <- renderPlot({
     vcc_hist()
   })
   
   vcc_versus <- reactive({
+    nm <- varnames()
+    
+    # adicionar estrato como cor
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
+    
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "versus" )
+    residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "versus",color = grupo[length(grupo)] )
   })
   output$graph_res_vcc_versus <- renderPlot({
     vcc_versus()
   })
   
   vsc_scatter <- reactive({
+    nm <- varnames()
+    
+    # adicionar estrato como cor
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
+    
+    
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot" )
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot",color = grupo[length(grupo)] )
   })
   output$graph_res_vsc_scatterplot <- renderPlot({
     vsc_scatter()
   })
   
   vsc_hist <- reactive({
+    nm <- varnames()
+    
+    # adicionar estrato como cor
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve" )
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve",color = grupo[length(grupo)] )
   })
   output$graph_res_vsc_histogram <- renderPlot({
     vsc_hist()
   })
   
   vsc_versus <- reactive({
+    nm <- varnames()
+    
+    # adicionar estrato como cor
+    if(input$ajuste_p_estrato){
+      grupo <- nm$estrato
+    }else{
+      grupo <- ""
+    }
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus" )
+    residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus",color = grupo[length(grupo)] )
   })
   output$graph_res_vsc_versus <- renderPlot({
   vsc_versus()
