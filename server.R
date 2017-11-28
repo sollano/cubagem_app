@@ -37,31 +37,8 @@ source("funs/residuos_exp.R"      , encoding="UTF-8")
 source("funs/cub_summary.R"       , encoding="UTF-8")
 source("funs/curva_arvore_media.R", encoding="UTF-8")
 source("funs/pow.R"               , encoding="UTF-8")
-
-#notin
-
-`%notin%` <- function (x, y){
-  !(x %in% y)
-}
-# Funcao para testar se uma variavel e numerica
-# Sera utilizada dentro da funcao validate
-check_numeric <- function(input, df, code){
-  
-  if(is.null(input) ){
-    
-    
-  }else if(is.na(input)){
-    
-    
-  }else if(input == ""){
-    
-  }else if(!is.null(input) && !is.numeric(df[[input]]) ){
-    
-    paste(code, "column must be numeric")
-    
-  }
-  
-}
+source("funs/notin.R"             , encoding="UTF-8")
+source("funs/check_numeric.R"     , encoding="UTF-8")
 
 # vectors for names ####
 
