@@ -330,7 +330,7 @@ shinyUI(
                                   column(3,
                                          radioButtons("graph_arvore_estrato",
                                                       "Gerar árvore média por estrato?",
-                                                      c("Sim"=TRUE,"Nao"=FALSE), inline = TRUE),offset = 9
+                                                      c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE, inline = TRUE),offset = 9
                                   )
                                 ),
                                 
