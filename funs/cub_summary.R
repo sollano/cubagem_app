@@ -40,7 +40,7 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
   vcc <- sym(vcc)
   vsc <- sym(vsc)
   
-    df  %>%                             # define data frame utilizado
+  df  %>%                               # define data frame utilizado
     na_if(0) %>%                        # Transforma zeros em NA
     group_by_at( vars(.groups) )  %>%   # definicao da chave
     summarize(                          # Funcao que compila os df
@@ -49,13 +49,13 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
       VCC  = sum(!!vcc,  na.rm = TRUE), # Soma de volume com casca
       VSC  = sum(!!vsc,  na.rm = TRUE), # Soma de volume sem casca
       AS   = pi * DAP^2 / 4000        , # Area Seccional
-    #  VCIL = AS * HT,
+      #  VCIL = AS * HT,
       FFCC = VCC / (AS * HT )         , # Fator de forma com casca
       FFSC = VSC / (AS * HT ) ) %>%     # Fator de forma sem casca
-   mutate_at(                           # Funcao que cria novas variaveis utilizando as variaveis
-     vars(contains("FF")),              # especificadas por vars
-     funs(medio = mean)    ) %>%        # Fator de forma medio
-      na_if(0) %>%                      # Se vsc nao for informado, variaveis que o utilizam serao 0, portanto, deve-se converte-las para NA, para depois remove-las
-   select_if(Negate(anyNA))             # remove variaveis que nao foram informadas (argumentos opicionais nao inseridos viram NA)
-    
+    mutate_at(                          # Funcao que cria novas variaveis utilizando as variaveis
+      vars(contains("FF")),             # especificadas por vars
+      funs(medio = mean)    ) %>%       # Fator de forma medio
+    na_if(0) %>%                        # Se vsc nao for informado, variaveis que o utilizam serao 0, portanto, deve-se converte-las para NA, para depois remove-las
+    select_if(Negate(anyNA))            # remove variaveis que nao foram informadas (argumentos opicionais nao inseridos viram NA)
+  
 }
