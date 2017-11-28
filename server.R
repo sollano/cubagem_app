@@ -969,7 +969,7 @@ shinyServer(function(input, output, session){
     
     g <- dd_list()[["dd_geral"]]
     #g$CC2 <-  sapply(g$CC , gsub, pattern= "[.]",replacement= "," )
-    
+    suppressWarnings(
     ggplot(g, aes(as.factor(CC),NumIndv)) +
       geom_bar(stat = "identity",color="black")+
       #   scale_y_continuous( expand=c(0,15) ) +
@@ -985,7 +985,7 @@ shinyServer(function(input, output, session){
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
-    
+    )
     
   })
   output$dd_graph_indv <- renderPlot({
@@ -997,7 +997,7 @@ shinyServer(function(input, output, session){
   dd_g2 <- reactive({
     
     g <- dd_list()[["dd_geral"]]
-    
+    suppressWarnings(
     ggplot(g, aes(as.factor(CC),VCC)) +
       geom_bar(stat = "identity",color="black")+
       #  scale_y_continuous( expand=c(0,15) ) +
@@ -1013,7 +1013,7 @@ shinyServer(function(input, output, session){
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
-    
+    )
   })
   output$dd_graph_vcc <- renderPlot({
     
@@ -1023,7 +1023,7 @@ shinyServer(function(input, output, session){
   dd_g3 <- reactive({
     
     g <- dd_list()[["dd_geral"]]
-    
+    suppressWarnings(
     ggplot(g, aes(as.factor(CC),VSC)) +
       geom_bar(stat = "identity",color="black")+
       #  scale_y_continuous( expand=c(0,15) ) +
@@ -1039,7 +1039,7 @@ shinyServer(function(input, output, session){
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
-    
+    )
   })
   output$dd_graph_vsc <- renderPlot({
     
@@ -1049,7 +1049,7 @@ shinyServer(function(input, output, session){
   dd_g4 <- reactive({
     
     g <- dd_list()[["dd_geral"]] 
-    
+    suppressWarnings(
     ggplot(g, aes(as.factor(CC),G)) +
       geom_bar(stat = "identity",color="black")+
       # scale_y_continuous( expand=c(0,15) ) +
@@ -1066,7 +1066,7 @@ shinyServer(function(input, output, session){
         axis.line.x = element_line(color="black"),
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
-    
+    )
   })
   output$dd_graph_G <- renderPlot({
     
