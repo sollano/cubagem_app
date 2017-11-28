@@ -41,14 +41,14 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
  p <- df %>% 
     mutate(d_sob_dap = (!!d)/(!!dap),h_sob_ht = (!!h)/(!!ht), h_sob_ht_quad = h_sob_ht^2 ) %>% 
     ggplot2::ggplot(aes(x=d_sob_dap, y=h_sob_ht)) + 
-    ggplot2::geom_point(size = 2, alpha = .4) + 
+    ggplot2::geom_point(size = 3, alpha = .4) + 
     # coord_fixed(ratio=2) +
     ggplot2::labs(x=expression(italic(frac(d,DAP))), 
          y=expression(italic(frac(h,HT)))
     ) +
     ggpmisc::stat_poly_eq(
       formula = x ~ poly(y, 2, raw=T),
-      size = 3,
+      size = 4,
       eq.x.rhs    = "italic(frac(h,HT))",
       eq.with.lhs = "italic(hat(frac(d,DAP)))~`=`~", 
       ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~")),
@@ -60,11 +60,11 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
       panel.grid.major = element_blank(), 
       panel.grid.minor = element_blank(),
       panel.border = element_blank(),
-      axis.title   = element_text(size = 14,face="bold"), 
-      axis.text    = element_text(size = 14),
+      axis.title   = element_text(size = 15,face="bold"), 
+      axis.text    = element_text(size = 15),
       axis.line.x = element_line(color="black"),
       axis.line.y = element_line(color="black"),
-      strip.text.x = element_text(size = 14)   )
+      strip.text.x = element_text(size = 15)   )
   
  if(!is.null(facet) ){p <- p + facet_wrap(facet) }
 
