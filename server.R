@@ -405,18 +405,25 @@ shinyServer(function(input, output, session){
           data[,input$col.rm_data_var]))
     }
     
+    list(
+    
     selectizeInput("level.rm_data_level",
-                   label = "Selecione o(s) nivel(s) que se deseja remover:",
+                   label = "Selecione o(s) nivel(s) que se deseja remover ou manter:",
                    choices = opcoes,
                    multiple = TRUE,
                    options = list(
                      placeholder = 'Selecione o(s) nivel(s) abaixo',
                      onInitialize = I('function() { this.setValue(""); }')
                    ) # options    
+    ),
+    
+    radioButtons("rm_or_keep",
+                 label = "Remover, ou manter dados referentes ao nível selecionado?",
+                 c("Remover"=FALSE, "Manter"=TRUE),
+                 selected = FALSE,
+                 inline = TRUE  )
+    
     )
-    
-    
-    
   })
   output$rm_vars <- renderUI({
     
@@ -464,7 +471,7 @@ shinyServer(function(input, output, session){
     # (isso faz com o que o dado original seja exibido logo que se entra na aba de filtrar),
     # caso contrario ele filtra o dado conforme o usuario seleciona as variaveis
     
-    if( is.null(input$col.rm_data_var) || input$col.rm_data_var ==""){
+    if( is.null(input$col.rm_data_var) || input$col.rm_data_var =="" || is.null(input$rm_or_keep) || input$rm_or_keep == ""){
       
       # esse if acima so foi feito dessa forma pois tentar adicionar ! nas condicoes acima
       # nao funcionou, por algum motivo.
@@ -474,7 +481,15 @@ shinyServer(function(input, output, session){
     }else{
       
       # remove linhas caso um nivel seja selecionado
-      data <- data[!data[[input$col.rm_data_var]] %in% input$level.rm_data_level,]
+      
+         if(input$rm_or_keep){
+           boolean_vec <- data[[input$col.rm_data_var]]     %in%   input$level.rm_data_level
+         }else{
+           boolean_vec <- data[[input$col.rm_data_var]]   %notin%  input$level.rm_data_level
+         }
+      
+      
+      data <- data[boolean_vec,]
       
       # data <- data %>% filter( ! .data[[input$col.rm_data_var]] %in% input$level.rm_data_level )
       
@@ -496,11 +511,12 @@ shinyServer(function(input, output, session){
       #ex1["HT"][ ex1["HT"] == 0 ] <- NA
       
       # Converter zero em NA quando a variavel tiver o seu nome definido
+      if(length(data)>1){
       if(nm$dap!=""){  data[nm$dap][ data[nm$dap] == 0 ] <- NA }
       if(nm$ht!= ""){  data[nm$ht ][ data[nm$ht ] == 0 ] <- NA }
       if(nm$di!= ""){  data[nm$di ][ data[nm$di ] == 0 ] <- NA }
       if(nm$hi!= ""){  data[nm$hi ][ data[nm$hi ] == 0 ] <- NA }
-      
+      }
     }
     
     # converter valores
