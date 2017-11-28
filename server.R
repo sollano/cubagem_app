@@ -67,7 +67,7 @@ e_casca_names <- c("e_casca","espessura_casca", "e_casca (mm)", "e_casca (cm)")
 comp_secao_names <- c("comp_secao")
 CAP_names <- c("CAP","Cap","cap", "cbh", "Cbh","CBH","CBH_11","CAP(cm)","CAP(cm)","Cap (cm)","Cap(cm)")
 DAP_names <- c("DAP","Dap","dap", "dbh", "Dbh","DBH","DBH_11","DAP(cm)","DAP(cm)","Dap (cm)","Dap(cm)")
-HT_names <- c("HT_EST", "HT", "Ht", "ht","Htot","ALTURA","Altura","Altura_Total", "ALTURA_TOTAL","HT (m)","HT(m)","Ht (m)","Ht(m)","Altura Total (m)","Altura total(m)")
+HT_names <- c("HT_EST", "HT", "Ht", "ht","Htot","ALTURA","Altura","Altura_Total", "ALTURA_TOTAL","HT (m)","HT(m)","Ht (m)","Ht(m)","Altura Total (m)","Altura total(m)", "altura", "Altura", "ALTURA")
 VCC_names <- c("VCC","Vcc", "vcc", "VOL", "Vol", "vol" ,"VOLUME", "Volume (m³)", "VOLUME (m³)", "VOL(m³)", "Volume(m³)", "VOLUME(m³)", "VOL(m³)")
 arvore_names <- c("ARVORE", "Arvore", "arvore", "ARV", "Arv", "arv", "ARV.", "Arv.", "arv.","NP","Np","np","Árvore","ÁRVORE","árvore" )
 estratos_names <- c("TALHAO", "Talhao", "talhao","COD_TALHAO","Cod_Talhao","cod_talhao", "COD.TALHAO", "Cod.Talhao","cod.talhao", "area.code", "Area.Code","AREA.CODE", "area_code","Area_Code","AREA_CODE")
@@ -933,7 +933,7 @@ shinyServer(function(input, output, session){
     lista <- list()
 
     lista[["dd_geral"]] <- classe_diametro(df = dados, 
-                                           dap = nm$dap,
+                                           dap = "DAP",
                                            parcela = NA,
                                            area_parcela = NA, 
                                            ic = nm$IC.dap, 
@@ -947,7 +947,7 @@ shinyServer(function(input, output, session){
     if(suppressWarnings(!is.null(dados$VSC))){
       lista[["dd_geral"]] <- lista[["dd_geral"]] %>% 
         mutate(VSC = classe_diametro(df = dados, 
-                                     dap = nm$dap,
+                                     dap = "DAP",
                                      parcela = NA,
                                      area_parcela = NA, 
                                      ic = nm$IC.dap, 
