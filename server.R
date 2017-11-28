@@ -1313,7 +1313,9 @@ shinyServer(function(input, output, session){
     }
     
     g <- ajuste_vol_tab_est()
+    suppressWarnings(
     residuos_exp(g, "VCC", "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve",color = grupo[length(grupo)] )
+    )
   })
   output$graph_res_vcc_histogram <- renderPlot({
     vcc_hist()
@@ -1364,7 +1366,9 @@ shinyServer(function(input, output, session){
       grupo <- ""
     }
     g <- ajuste_vol_tab_est()
+    suppressWarnings(
     residuos_exp(g, "VSC", "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve",color = grupo[length(grupo)] )
+    )
   })
   output$graph_res_vsc_histogram <- renderPlot({
     vsc_hist()
