@@ -1088,7 +1088,7 @@ shinyServer(function(input, output, session){
     #dados_lm
     
     
-    residuos_exp(dados, "VSC", "VCC", type="versus",point_size = 4 ) + labs(x="Volume sem casca (m³)",y="Volume com casca (m³)")
+    residuos_exp(dados, "VCC", "VSC", type="versus",point_size = 4 ) + labs(x="Volume com casca (m³)",y="Volume sem casca (m³)")
     
     
   })
