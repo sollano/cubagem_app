@@ -40,7 +40,7 @@ hubersc <- function(df, di, comp_secao, es, .groups, di_mm_to_cm=FALSE, es_mm_to
   # Converter diametro da secao de milimetro para centimetro
     if(di_mm_to_cm){
     
-    df[[di]] <- df[[di]]/10
+    df[[di]] <- df[[di]]/100
     
   }
   

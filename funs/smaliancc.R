@@ -76,7 +76,7 @@ smaliancc <- function(df, di, hi, .groups, di_mm_to_cm=FALSE, hi_cm_to_m=FALSE )
   # Converter altura da secao de centimetro para metro
   if(hi_cm_to_m){
     
-    df[[hi]] <- df[[hi]]/10
+    df[[hi]] <- df[[hi]]/100
     
   }
   

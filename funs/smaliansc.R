@@ -89,7 +89,7 @@ smaliansc <- function(df, di, hi, es, .groups, di_mm_to_cm=FALSE, hi_cm_to_m=FAL
   # Converter altura da secao de centrometro para metro
   if(hi_cm_to_m){
     
-    df[[hi]] <- df[[hi]]/10
+    df[[hi]] <- df[[hi]]/100
     
   }
 
