@@ -48,7 +48,7 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
     ) +
     ggpmisc::stat_poly_eq(
       formula = x ~ poly(y, 2, raw=T),
-      size = 4,
+      size = 3,
       eq.x.rhs    = "italic(frac(h,HT))",
       eq.with.lhs = "italic(hat(frac(d,DAP)))~`=`~", 
       ggplot2::aes(label = paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~")),
