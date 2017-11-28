@@ -944,7 +944,8 @@ shinyServer(function(input, output, session){
                                            dapmin = nm$diam.min, 
                                            especies = NA, 
                                            volume = "VCC",
-                                           rotulo.NI = NA ) %>%
+                                           rotulo.NI = NA,
+                                           keep_unused_classes = TRUE ) %>%
                                            rename(VCC= volume)
     
     # Se o Volume sem casca for calculado, inclui-lo na tabela
@@ -958,7 +959,8 @@ shinyServer(function(input, output, session){
                                      dapmin = nm$diam.min, 
                                      especies = NA, 
                                      volume = "VSC",
-                                     rotulo.NI = NA ) %>%
+                                     rotulo.NI = NA,
+                                     keep_unused_classes = TRUE ) %>%
                  rename(VSC= volume) %>%
                  pull(VSC) )
       
