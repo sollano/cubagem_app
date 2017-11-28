@@ -135,7 +135,8 @@ lm_table <- function(df, modelo, .groups, output = "table", est.name = "est", ke
            Coefs  = purrr::map(Reg, tidy_   ),
            Qualid = purrr::map(Reg, glance_ ),
            Res = purrr::map(Reg, resid),
-           est = purrr::map2(Reg, data, predict) ) 
+           est = purrr::map2(Reg, data, predict) ) %>% 
+    ungroup
   
   x$A <- NULL 
   
