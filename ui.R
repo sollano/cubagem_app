@@ -342,6 +342,7 @@ shinyUI(
                                   tabPanel("Gráfico do Nº de indivíduos por classe diamétrica" , plotOutput("dd_graph_indv",height = "550px") ),
                                   tabPanel("Gráfico de VCC por classe diamétrica"              , plotOutput("dd_graph_vcc",height = "550px") ),
                                   tabPanel("Gráfico de VSC por classe diamétrica"              , plotOutput("dd_graph_vsc",height = "550px") ),
+                                  tabPanel("Volume com casca x Volume sem casca"               , plotOutput("graph_vcc_x_vsc",height = "550px") ),
                                   tabPanel("Gráfico de G por classe diamétrica"                , plotOutput("dd_graph_G",height = "550px") ),
                                   tabPanel("Gráfico da forma média das árvores"                , plotOutput("graph_kozak" ,height = "550px", width = "700px" ))
 
@@ -440,6 +441,7 @@ shinyUI(
                                                              "Indviduos por CC",
                                                              "VCC por CC",
                                                              "VSC por CC",
+                                                             "VCC x VSC",
                                                              "G por CC",
                                                              "Forma media das arvores",
                                                              "Dispersao dos residuos VCC",

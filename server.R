@@ -1021,8 +1021,12 @@ shinyServer(function(input, output, session){
     
   })
   dd_g3 <- reactive({
+    nm <- varnames()
+    validate(
+    need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
     
     g <- dd_list()[["dd_geral"]]
+    
     suppressWarnings(
     ggplot(g, aes(as.factor(CC),VSC)) +
       geom_bar(stat = "identity",color="black")+
@@ -1067,6 +1071,31 @@ shinyServer(function(input, output, session){
         axis.line.y = element_line(color="black"),
         strip.text.x = element_text(size = 22)   )
     )
+  })
+  vcc_x_vsc <- reactive({
+    
+    
+    nm <- varnames()
+    dados <- dados_nivel_arvore()
+    
+    validate(
+      need(dados, "Por favor faça o cálculo do volume ou o upload de uma base de dados em nível de arvore"),
+      need(nm$dap,"Por favor mapeie a coluna referente a 'dap'  "),
+      need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  ")
+    )
+    
+    #dados_lm <- lm_table(dados, VCC ~ VSC, output = "est")
+    #dados_lm
+    
+    
+    residuos_exp(dados, "VSC", "VCC", type="versus",point_size = 4 ) + labs(x="Volume sem casca (m³)",y="Volume com casca (m³)")
+    
+    
+  })
+  output$graph_vcc_x_vsc <- renderPlot({
+    
+    vcc_x_vsc()
+    
   })
   output$dd_graph_G <- renderPlot({
     
@@ -1316,7 +1345,11 @@ shinyServer(function(input, output, session){
   })
   
   vsc_scatter <- reactive({
+   
     nm <- varnames()
+    
+    validate(
+      need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
     
     # adicionar estrato como cor
     if(input$ajuste_p_estrato){
@@ -1334,8 +1367,12 @@ shinyServer(function(input, output, session){
   })
   
   vsc_hist <- reactive({
+    
     nm <- varnames()
     
+    validate(
+      need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
+
     # adicionar estrato como cor
     if(input$ajuste_p_estrato){
       grupo <- nm$estrato
@@ -1352,7 +1389,11 @@ shinyServer(function(input, output, session){
   })
   
   vsc_versus <- reactive({
+    
     nm <- varnames()
+    
+    validate(
+      need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
     
     # adicionar estrato como cor
     if(input$ajuste_p_estrato){
@@ -1458,6 +1499,7 @@ shinyServer(function(input, output, session){
            "Indviduos por CC"            = dd_g1(),
            "VCC por CC"                  = dd_g2(),
            "VSC por CC"                  = dd_g3(),
+           "VCC x VSC"                   = vcc_x_vsc,
            "G por CC"                    = dd_g4(),
            "Forma media das arvores"     = kozak(),
            "Dispersao dos residuos VCC"  = vcc_scatter(),
