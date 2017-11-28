@@ -465,7 +465,7 @@ shinyServer(function(input, output, session){
     # need(is.numeric(data[[nm$ht]]), "ht column must be numeric"), errorClass = "WRONG")
     
     
-    # o primeiro if sera para remover as linhas
+    # o primeiro if sera para filtrar as linhas
     
     # se o usuario nao selecionar nada, retorna o dado normal 
     # (isso faz com o que o dado original seja exibido logo que se entra na aba de filtrar),
@@ -480,11 +480,11 @@ shinyServer(function(input, output, session){
       
     }else{
       
-      # remove linhas caso um nivel seja selecionado
       
-         if(input$rm_or_keep){
+      
+         if(input$rm_or_keep){ # mantem se for verdadeiro
            boolean_vec <- data[[input$col.rm_data_var]]     %in%   input$level.rm_data_level
-         }else{
+         }else{                # remove se for falso
            boolean_vec <- data[[input$col.rm_data_var]]   %notin%  input$level.rm_data_level
          }
       
@@ -511,7 +511,7 @@ shinyServer(function(input, output, session){
       #ex1["HT"][ ex1["HT"] == 0 ] <- NA
       
       # Converter zero em NA quando a variavel tiver o seu nome definido
-      if(length(data)>1){
+      if(nrow(data)>0){
       if(nm$dap!=""){  data[nm$dap][ data[nm$dap] == 0 ] <- NA }
       if(nm$ht!= ""){  data[nm$ht ][ data[nm$ht ] == 0 ] <- NA }
       if(nm$di!= ""){  data[nm$di ][ data[nm$di ] == 0 ] <- NA }
@@ -577,6 +577,13 @@ shinyServer(function(input, output, session){
     
     # Essa parte do server ira gerar uma UI vazia, que gera avisos caso alguma condicao abaixo seja violada.
     #
+    
+    #Avisa quando o usuário remove todas as linhas do dado
+    validate(
+    need(nrow(rawData())>0,
+         "Base de dados vazia"),
+    errorClass = "AVISO"
+    )
     # Os erros so poderao ser mostrados se o usuario selecionar alguma coluna para ser removido
     req(input$col.rm_vars)
     
@@ -586,14 +593,12 @@ shinyServer(function(input, output, session){
     # e utilizado ! pois a condicao necessaria (que nao gera aviso) e que a variavel nao seja removida.
     # A cor da mensagem (laranja) e definada no argumento errorClass
     validate(
+      need(nrow(rawData())>0,
+           "Base de dados vazia"),
       need(! nm$dap %in% input$col.rm_vars, 
            "You just removed the 'dap' variable. This will prevent you from running some of the app's functions") , 
       need(! nm$ht %in% input$col.rm_vars, 
            "You just removed the 'ht' variable. This will prevent you from running some of the app's functions") , 
-      need(! nm$vcc %in% input$col.rm_vars, 
-           "You just removed the 'vcc' variable. This will prevent you from running some of the app's functions") ,
-      need(! nm$vsc %in% input$col.rm_vars, 
-           "You just removed the 'vsc' variable. This will prevent you from running some of the app's functions") ,
       need(! nm$estrato %in% input$col.rm_vars, 
            "You just removed the 'estrato' variable. This will prevent you from running some of the app's functions"),
       
@@ -729,6 +734,7 @@ shinyServer(function(input, output, session){
     
     validate(
       need(dados, "Por favor faça o upload da base de dados"),
+      need(nrow(dados)>0, "Base de dados vazia"),
       need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
       need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
@@ -1126,6 +1132,7 @@ shinyServer(function(input, output, session){
     validate(
       need(dados, "Por favor faça o upload da base de dados"),
       need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
+      need(nrow(dados)>0, "Base de dados vazia"),
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
       need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
     

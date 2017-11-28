@@ -357,7 +357,7 @@ shinyUI(
                               
                               fluidPage(
                                 
-                                h1("Ajuste de Modelos Volumétricos", style = "text-align: center;"),
+                                h1("Ajuste de modelos volumétricos", style = "text-align: center;"),
                                 br(),
                                 fluidRow(
                                   
