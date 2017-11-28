@@ -48,9 +48,10 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
       HT   = mean(!!ht,  na.rm = TRUE), # media de HT
       VCC  = sum(!!vcc,  na.rm = TRUE), # Soma de volume com casca
       VSC  = sum(!!vsc,  na.rm = TRUE), # Soma de volume sem casca
-      AS   = pi * DAP^2 / 4000 * HT   , # Area Seccional
-      FFCC = VCC / AS * HT            , # Fator de forma com casca
-      FFSC = VSC / AS * HT ) %>%        # Fator de forma sem casca
+      AS   = pi * DAP^2 / 4000        , # Area Seccional
+    #  VCIL = AS * HT,
+      FFCC = VCC / (AS * HT )         , # Fator de forma com casca
+      FFSC = VSC / (AS * HT ) ) %>%     # Fator de forma sem casca
    mutate_at(                           # Funcao que cria novas variaveis utilizando as variaveis
      vars(contains("FF")),              # especificadas por vars
      funs(medio = mean)    ) %>%        # Fator de forma medio
