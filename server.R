@@ -1379,7 +1379,7 @@ shinyServer(function(input, output, session){
                          "Dado utilizado"          ,
                          "Vol. por secao Smalian"  ,
                          "Vol. por secao Huber"    ,
-                         "Totalizacao do volume"   ,
+                         "Totalizacao das arvores" ,
                          "Distribuicao diametrica" ,
                          "Tabela de coeficientes" 
                          ), inline = T )
@@ -1407,8 +1407,8 @@ shinyServer(function(input, output, session){
       L[["Vol. por secao Huber"]] <-  try(vol_huber(), silent = T)
     }
 
-    if("Totalizacao do volume" %in% input$dataset ) {
-      L[["Totalizacao do volume"]] <-  try(dados_nivel_arvore(), silent = T)
+    if("Totalizacao das arvores" %in% input$dataset ) {
+      L[["Totalizacao das arvores"]] <-  try(dados_nivel_arvore(), silent = T)
     }
     
     if("Distribuicao diametrica" %in% input$dataset ) {
@@ -1430,7 +1430,7 @@ shinyServer(function(input, output, session){
     L[["Dado utilizado"]]       <-  try(rawData(), silent = T)
     L[["Vol. por secao Smalian"]] <- try(vol_smalian(), silent = T)
     L[["Vol. por secao Huber"]] <- try(vol_huber(), silent = T)
-    L[["Totalizacao do volume"]] <- try(dados_nivel_arvore(), silent = T)
+    L[["Totalizacao das arvores"]] <- try(dados_nivel_arvore(), silent = T)
     L[["Distribuicao diametrica"]] <-  try(dd_list()[["dd_geral"]], silent=T)
     L[["Tabela de coeficientes"]] <- try(ajuste_vol(), silent=T)
     L
