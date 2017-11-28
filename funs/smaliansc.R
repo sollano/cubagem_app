@@ -106,7 +106,7 @@ smaliansc <- function(df, di, hi, es, .groups, di_mm_to_cm=FALSE, hi_cm_to_m=FAL
       .dots = 
         setNames(
           list(
-            lazyeval::interp( ~ di-2*(es/10) , di= as.name(di), es = as.name(es) ),
+            lazyeval::interp( ~ di-2*(es) , di= as.name(di), es = as.name(es) ),
             lazyeval::interp( ~  (di_sc^2* pi) / 40000 , di_sc = as.name("di_sc")), 
             lazyeval::interp( ~ ((AS + lead(AS) )/2 ) * (lead(hi) - hi) , AS = as.name("AS_SC"),  hi = as.name(hi))
           ),

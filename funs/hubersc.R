@@ -58,7 +58,7 @@ hubersc <- function(df, di, comp_secao, es, .groups, di_mm_to_cm=FALSE, es_mm_to
       .dots = 
         setNames(
           list(
-            lazyeval::interp( ~ di-2*(es/10) , di= as.name(di), es = as.name(es) ),
+            lazyeval::interp( ~ di-2*(es) , di= as.name(di), es = as.name(es) ),
             lazyeval::interp( ~  (di_sc^2* pi) / 40000 , di_sc = as.name("di_sc")), 
             lazyeval::interp( ~ comp_secao , AS = as.name("AS_SC"),  comp_secao = as.name(comp_secao))
           ),
