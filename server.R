@@ -1163,7 +1163,9 @@ shinyServer(function(input, output, session){
       )
     
     # Ajustar por estrato caso o usuário deseje
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
@@ -1205,9 +1207,10 @@ shinyServer(function(input, output, session){
     }
     
     # Organizar a tabela
-    tab <- 
-    
-    if(input$ajuste_p_estrato){
+
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       
      # tab <- tab %>% arrange_at(vars(c(grupo, "Nome"))) %>% select_at(vars(c(grupo, "Nome", "Modelo")), everything() )
 
@@ -1316,7 +1319,9 @@ shinyServer(function(input, output, session){
     nm <- varnames()
     
     # adicionar estrato como cor
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
@@ -1333,7 +1338,9 @@ shinyServer(function(input, output, session){
     nm <- varnames()
     
     # adicionar estrato como cor
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
@@ -1352,7 +1359,9 @@ shinyServer(function(input, output, session){
     nm <- varnames()
     
     # adicionar estrato como cor
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
@@ -1373,7 +1382,9 @@ shinyServer(function(input, output, session){
       need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
     
     # adicionar estrato como cor
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
@@ -1395,7 +1406,9 @@ shinyServer(function(input, output, session){
       need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
 
     # adicionar estrato como cor
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
@@ -1417,7 +1430,9 @@ shinyServer(function(input, output, session){
       need(nm$e_casca,"Por favor mapeie a coluna referente a 'espessura da casca'  "))
     
     # adicionar estrato como cor
-    if(input$ajuste_p_estrato){
+    if(is.null(nm$estrato) || is.na(nm$estrato) || nm$estrato==""){
+      grupo <- ""
+    }else if(input$ajuste_p_estrato){
       grupo <- nm$estrato
     }else{
       grupo <- ""
