@@ -1242,7 +1242,19 @@ shinyServer(function(input, output, session){
     
     
   })
- 
+  
+  output$aviso_ajuste <- renderUI({
+    
+    req( input$ajuste_p_estrato==TRUE )
+    
+    validate(
+      need(!is.null(input$col.estrato),
+           "Nenhum estrato selecionado. O ajuste será feito para todos os dados"),
+      errorClass = "AVISO"
+    )
+    
+  })
+  
   ajuste_vol_tab_est <- reactive({
     
     nm <- varnames()
@@ -1535,7 +1547,7 @@ shinyServer(function(input, output, session){
            "Indviduos por CC"            = dd_g1(),
            "VCC por CC"                  = dd_g2(),
            "VSC por CC"                  = dd_g3(),
-           "VCC x VSC"                   = vcc_x_vsc,
+           "VCC x VSC"                   = vcc_x_vsc(),
            "G por CC"                    = dd_g4(),
            "Forma media das arvores"     = kozak(),
            "Dispersao dos residuos VCC"  = vcc_scatter(),

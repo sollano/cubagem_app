@@ -364,9 +364,13 @@ shinyUI(
                                   column(3,
                                          radioButtons("ajuste_p_estrato",
                                                       "Ajustar modelos por estrato?",
-                                                      c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE,inline = TRUE),offset = 0
+                                                      c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE,inline = TRUE)
+                                         
                                   )
-                                ),
+                                  ),
+                                
+                                fluidRow(column(6,uiOutput("aviso_ajuste"))),
+                                
                                 fluidRow(   
                                   tabsetPanel(
                                     tabPanel("Tabela de Coeficientes",DT::dataTableOutput("ajuste_vol_tab") ), 
