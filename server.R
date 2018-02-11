@@ -61,22 +61,13 @@ shinyServer(function(input, output, session){
   output$upload      <- renderUI({
     
     validate(need(input$df_select == "Fazer o upload", "" )  )
-    
-    list(    
-      
-      radioButtons("df", 
-                   "Tipo da base de dados:", 
-                   choices = c("Dados em nivel de secao",
-                               "Dados em nivel de arvore"),
-                   selected = "Dados em nivel de secao"),
-      
       
       radioButtons("df_extension", 
                    "Informe o formato do arquivo:", 
                    choices = c(".csv (Valor separado por virgulas) ou .txt (arquivo de texto)",
                                ".xlsx (Excel)"),
                    selected = ".csv (Valor separado por virgulas) ou .txt (arquivo de texto)")
-    )
+    
   })
   output$upload_csv  <- renderUI({
     
@@ -735,7 +726,8 @@ shinyServer(function(input, output, session){
       need(nrow(dados)>0, "Base de dados vazia"),
       need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
-      need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
+      need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "),
+      need(nm$arvore,"Por favor mapeie a coluna referente a 'arvore' ") )
     
      if(any(nm$estrato != "")){
       group_arv <- c(nm$estrato, nm$arvore)
@@ -792,7 +784,8 @@ shinyServer(function(input, output, session){
       need(dados, "Por favor faça o upload da base de dados"),
       need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
-      need(nm$comp_secao,"Por favor mapeie a coluna referente a 'comprimento da secao'  "))
+      need(nm$comp_secao,"Por favor mapeie a coluna referente a 'comprimento da secao'  "),
+      need(nm$arvore,"Por favor mapeie a coluna referente a 'arvore' ") )
     
     if(any(nm$estrato != "")){
       group_arv <- c(nm$estrato, nm$arvore)
@@ -857,7 +850,7 @@ shinyServer(function(input, output, session){
       need(dados, "Por favor faça o calculo do volume utilizando o método desejado"),
       need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
       need(nm$dap,"Por favor mapeie a coluna referente a 'DAP'  "),
-      need(nm$ht,"Por favor mapeie a coluna referente a 'Altura'  "))
+      need(nm$ht,"Por favor mapeie a coluna referente a 'altura'  "))
     
     # Utiliza o estrato no grupo, caso ele seja selecionado
     if(any(nm$estrato != "")){
@@ -1132,7 +1125,9 @@ shinyServer(function(input, output, session){
       need(input$df == "Dados em nivel de secao", "Base de dados incompativel" ),
       need(nrow(dados)>0, "Base de dados vazia"),
       need(nm$di,"Por favor mapeie a coluna referente a 'diametro da secao'  "),
-      need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "))
+      need(nm$hi,"Por favor mapeie a coluna referente a 'altura da secao'  "),
+      need(nm$dap,"Por favor mapeie a coluna referente a 'DAP'  "),
+      need(nm$ht,"Por favor mapeie a coluna referente a 'altura'  "))
     
     if(input$graph_arvore_estrato){
       grupo <- nm$estrato

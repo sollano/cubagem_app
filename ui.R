@@ -93,6 +93,12 @@ shinyUI(
                                                  "Utilizar o dado de exemplo de Huber"), 
                                                selected = "Fazer o upload"),
                                   
+                                  radioButtons("df", 
+                                               "Tipo da base de dados:", 
+                                               choices = c("Dados em nivel de secao",
+                                                           "Dados em nivel de arvore"),
+                                               selected = "Dados em nivel de secao"),
+                                  
                                   uiOutput("upload"), # tipos de arquivos aceitos
                                   hr(),
                                   uiOutput("upload_csv"), # tipos de arquivos aceitos
