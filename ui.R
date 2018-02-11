@@ -151,9 +151,7 @@ shinyUI(
                                            ),
                                            uiOutput("selec_comp_secao")
                                          ))
-                                  
-                                  
-                                  
+
                                 ), # fluidRow 1
                                 
                                 fluidRow(
@@ -209,7 +207,11 @@ shinyUI(
                                            ),
                                            uiOutput("selec_estrato")
                                          )) # Coluna area.total
-                                    )
+                                    ), # fluidRow 3
+                                
+                                # Fluidrow opcional que so aparece na ui se o usuario selecionar o dado em nivel de arvore
+                                # da a opcao do usuario selecionar a coluna do volume
+                                 uiOutput("selec_vol") #FluidRow 4
                                 
                               ) # fluidPage 
                               
