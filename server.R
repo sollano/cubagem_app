@@ -1282,10 +1282,10 @@ shinyServer(function(input, output, session){
     husch_cc <- paste("log(",nm$vcc,") ~ log(",nm$dap,")",sep=""  )
     spurr_cc <- paste("log(",nm$vcc,") ~  log(pow(",nm$dap,",2)*",nm$ht,")", sep="" )
     
-    # Ajustar modelo de schummacher
+    # Ajustar modelo de Schumacher
     tab <- bind_rows(
       lm_table(df=dados,modelo = schum_cc, grupo ) %>% 
-        mutate(Nome = "Schummacher  & Hall com casca",
+        mutate(Nome = "Schumacher  & Hall com casca",
                Modelo = "LN(VCC) = b0 + b1*LN(DAP) + b2*LN(HT) + e" ),
 
       lm_table(df=dados,modelo = husch_cc, grupo )%>% 
@@ -1307,7 +1307,7 @@ shinyServer(function(input, output, session){
       
       tab <- bind_rows(tab,
                    lm_table(df=dados,modelo = schum_sc, grupo ) %>% 
-                     mutate(Nome = "Schummacher & Hall sem casca",
+                     mutate(Nome = "Schumacher & Hall sem casca",
                             Modelo = "LN(VSC) = b0 + b1*LN(DAP) + b2*LN(HT) + e" ),
                    
                    lm_table(df=dados,modelo = husch_sc, grupo )%>% 
@@ -1397,7 +1397,7 @@ shinyServer(function(input, output, session){
       
       "VCC" = dados[[nm$vcc]],
       
-      "Schummacher & Hall com casca" = dados %>% 
+      "Schumacher & Hall com casca" = dados %>% 
         lm_table(modelo = schum_cc, 
                   grupo,
                   output = "est" ) %>% pull("est"),
@@ -1423,7 +1423,7 @@ shinyServer(function(input, output, session){
         mutate(
           "VSC" = dados[[nm$vsc]],
           
-          "Schummacher & Hall sem casca" = dados %>% 
+          "Schumacher & Hall sem casca" = dados %>% 
             lm_table(modelo = schum_sc, 
                      grupo,
                      output = "est" ) %>% pull("est"),
@@ -1467,7 +1467,7 @@ shinyServer(function(input, output, session){
     }
     
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, nm$vcc, "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot",color = grupo[length(grupo)] )
+    residuos_exp(g, nm$vcc, "Schumacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "scatterplot",color = grupo[length(grupo)] )
   })
   output$graph_res_vcc_scatterplot <- renderPlot({
     vcc_scatter()
@@ -1487,7 +1487,7 @@ shinyServer(function(input, output, session){
     
     g <- ajuste_vol_tab_est()
     suppressWarnings(
-    residuos_exp(g, nm$vcc, "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve",color = grupo[length(grupo)] )
+    residuos_exp(g, nm$vcc, "Schumacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "histogram_curve",color = grupo[length(grupo)] )
     )
   })
   output$graph_res_vcc_histogram <- renderPlot({
@@ -1507,7 +1507,7 @@ shinyServer(function(input, output, session){
     }
     
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, nm$vcc, "Schummacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "versus",color = grupo[length(grupo)] )
+    residuos_exp(g, nm$vcc, "Schumacher & Hall com casca", "Husch com casca", "Spurr com casca",type = "versus",color = grupo[length(grupo)] )
   })
   output$graph_res_vcc_versus <- renderPlot({
     vcc_versus()
@@ -1531,7 +1531,7 @@ shinyServer(function(input, output, session){
     
     
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, nm$vsc, "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot",color = grupo[length(grupo)] )
+    residuos_exp(g, nm$vsc, "Schumacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "scatterplot",color = grupo[length(grupo)] )
   })
   output$graph_res_vsc_scatterplot <- renderPlot({
     vsc_scatter()
@@ -1554,7 +1554,7 @@ shinyServer(function(input, output, session){
     }
     g <- ajuste_vol_tab_est()
     suppressWarnings(
-    residuos_exp(g, nm$vsc, "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve",color = grupo[length(grupo)] )
+    residuos_exp(g, nm$vsc, "Schumacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "histogram_curve",color = grupo[length(grupo)] )
     )
   })
   output$graph_res_vsc_histogram <- renderPlot({
@@ -1577,7 +1577,7 @@ shinyServer(function(input, output, session){
       grupo <- ""
     }
     g <- ajuste_vol_tab_est()
-    residuos_exp(g, nm$vsc, "Schummacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus",color = grupo[length(grupo)] )
+    residuos_exp(g, nm$vsc, "Schumacher & Hall sem casca", "Husch sem casca", "Spurr sem casca",type = "versus",color = grupo[length(grupo)] )
   })
   output$graph_res_vsc_versus <- renderPlot({
   vsc_versus()
