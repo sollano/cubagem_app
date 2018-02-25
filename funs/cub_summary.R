@@ -83,7 +83,7 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
   
   # := e utilizado quando o nome da variavel nova dentro do pipe esta dentro de um objeto
   
-  df %>%                                     # define data frame utilizado
+   df %>%                                     # define data frame utilizado
     dplyr::na_if(0) %>%                              # Transforma zeros em NA
     dplyr::group_by( !!!.groups_syms )  %>%         # definicao da chave
     dplyr::summarize(                                # Funcao que compila os df
@@ -96,10 +96,10 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
       #  VCIL     = AS *  (!!rlang::sym(ht_name)) ,
       FFCC        = (!!rlang::sym(vcc_name)) / (AS * (!!rlang::sym(ht_name)) )   , # Fator de forma com casca
       FFSC        = (!!rlang::sym(vsc_name)) / (AS * (!!rlang::sym(ht_name)) )   ) %>%     # Fator de forma sem casca
-    dplyr::mutate_at(                                # Funcao que cria novas variaveis utilizando as variaveis
+     dplyr::mutate_at(                                # Funcao que cria novas variaveis utilizando as variaveis
       vars(FFCC, FFSC),                   # especificadas por vars
       funs(medio = mean)    ) %>%             # Fator de forma medio
-    dplyr::na_if(0) %>%                              # Se vsc nao for informado, variaveis que o utilizam serao 0, portanto, deve-se converte-las para NA, para depois remove-las
-    dplyr::select_if(Negate(anyNA))                  # remove variaveis que nao foram informadas (argumentos opicionais nao inseridos viram NA)
+     dplyr::na_if(0) %>%                              # Se vsc nao for informado, variaveis que o utilizam serao 0, portanto, deve-se converte-las para NA, para depois remove-las
+     dplyr::select_if(Negate(anyNA))                  # remove variaveis que nao foram informadas (argumentos opicionais nao inseridos viram NA)
   
 }
