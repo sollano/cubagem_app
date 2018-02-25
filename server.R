@@ -1,5 +1,4 @@
 # Pacotes ####
-options(java.parameters = "-Xss2048k",shiny.maxRequestSize=25*1024^2)
 library(shiny)
 suppressPackageStartupMessages(library(DT))
 #library(plotly)
@@ -13,9 +12,7 @@ library(lazyeval)
 suppressPackageStartupMessages(library(ggplot2))
 library(ggthemes)
 library(ggpmisc)
-suppressPackageStartupMessages(library(xlsx))
-library(rJava)
-library(xlsxjars)
+library(openxlsx)
 library(rmarkdown)
 
 # Carregar dados de exemplo e funcoes ####
@@ -1635,7 +1632,10 @@ shinyServer(function(input, output, session){
     if("Tabela de coeficientes" %in% input$dataset ) {
       L[["Tabela de coeficientes"]] <-  try(ajuste_vol(), silent = T)
     }
-
+    
+    # Remover dataframes que geraram errol
+    L <- L[!sapply(L, is,"try-error")]
+    
     L
     
   })
@@ -1650,6 +1650,10 @@ shinyServer(function(input, output, session){
     L[["Totalizacao das arvores"]] <- try(dados_nivel_arvore(), silent = T)
     L[["Distribuicao diametrica"]] <-  try(dd_list()[["dd_geral"]], silent=T)
     L[["Tabela de coeficientes"]] <- try(ajuste_vol(), silent=T)
+    
+    # Remover dataframes que geraram errol
+    L <- L[!sapply(L, is,"try-error")]
+    
     L
     
   })
@@ -1657,14 +1661,14 @@ shinyServer(function(input, output, session){
   output$downloadData <- downloadHandler(
     filename = function(){"tabelas_app_cubagem.xlsx"},
     
-    content = function(file){xlsx.write.list(file, list_of_df_to_download() )}
+    content = function(file){suppressWarnings(openxlsx::write.xlsx( list_of_df_to_download(), file ))}
     
   )
   
   output$downloadAllData <- downloadHandler(
     filename = function(){"tabelas_app_cubagem.xlsx"},
     
-    content = function(file){xlsx.write.list(file, list_of_df_all() )}
+    content = function(file){ suppressWarnings(openxlsx::write.xlsx( list_of_df_all(), file )) }
     
   )
   

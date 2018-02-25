@@ -1,5 +1,4 @@
 # Pacotes ####
-options(java.parameters = "-Xss2048k",shiny.maxRequestSize=25*1024^2)
 library(shiny)
 suppressPackageStartupMessages(library(DT))
 #library(plotly)
@@ -13,9 +12,7 @@ library(lazyeval)
 suppressPackageStartupMessages(library(ggplot2))
 library(ggthemes)
 library(ggpmisc)
-suppressPackageStartupMessages(library(xlsx))
-library(rJava)
-library(xlsxjars)
+library(openxlsx)
 library(rmarkdown)
 
 # UI ####
