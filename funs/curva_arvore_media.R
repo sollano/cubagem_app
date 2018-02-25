@@ -22,8 +22,8 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
     stop("'d' must be a character containing a variable name", call.=F)
   }else if(length(d)!=1){
     stop("Length of 'd' must be 1", call.=F)
-  }else if(forestr::check_names(df, d)==F){
-    stop(forestr::check_names(df, d, boolean=F), call.=F)
+  }else if(check_names(df, d)==F){
+    stop(check_names(df, d, boolean=F), call.=F)
   }
   
   # se dap nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
@@ -33,8 +33,8 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
     stop("'dap' must be a character containing a variable name", call.=F)
   }else if(length(dap)!=1){
     stop("Length of 'dap' must be 1", call.=F)
-  }else if(forestr::check_names(df, dap)==F){
-    stop(forestr::check_names(df, dap, boolean=F), call.=F)
+  }else if(check_names(df, dap)==F){
+    stop(check_names(df, dap, boolean=F), call.=F)
   }
   
   # se h nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
@@ -44,8 +44,8 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
     stop("'h' must be a character containing a variable name", call.=F)
   }else if(length(h)!=1){
     stop("Length of 'h' must be 1", call.=F)
-  }else if(forestr::check_names(df, h)==F){
-    stop(forestr::check_names(df, h, boolean=F), call.=F)
+  }else if(check_names(df, h)==F){
+    stop(check_names(df, h, boolean=F), call.=F)
   }
   
   # se ht nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
@@ -55,8 +55,8 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
     stop("'ht' must be a character containing a variable name", call.=F)
   }else if(length(ht)!=1){
     stop("Length of 'ht' must be 1", call.=F)
-  }else if(forestr::check_names(df, ht)==F){
-    stop(forestr::check_names(df, ht, boolean=F), call.=F)
+  }else if(check_names(df, ht)==F){
+    stop(check_names(df, ht, boolean=F), call.=F)
   }
   
   # Se facet nao for fornecido, criar objeto que dplyr::group_by ignora, sem causar erro
@@ -66,8 +66,8 @@ curva_arvore_media <- function(df, d, dap, h, ht, facet){
     stop("facet must be a character", call. = F)
   }else if(! length(facet)%in% 1:10){
     stop("Length of 'facet' must be between 1 and 10", call.=F)
-  }else if(forestr::check_names(df,facet)==F){
-    stop(forestr::check_names(df,facet, boolean=F), call.=F)
+  }else if(check_names(df,facet)==F){
+    stop(check_names(df,facet, boolean=F), call.=F)
   }
   
   d_sym <- rlang::sym(d)

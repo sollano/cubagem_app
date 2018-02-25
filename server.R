@@ -22,6 +22,7 @@ library(rmarkdown)
 
 ex1 <- read.csv2("examples/exemplo_smalian.csv")
 ex2 <- read.csv2("examples/exemplo_huber.csv")
+source("funs/check_names.R"       , encoding="UTF-8")
 source("funs/smaliancc.R"         , encoding="UTF-8")
 source("funs/smaliansc.R"         , encoding="UTF-8")
 source("funs/hubercc.R"           , encoding="UTF-8")
