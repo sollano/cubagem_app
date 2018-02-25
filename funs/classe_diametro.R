@@ -51,7 +51,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
   
   
   # se vol nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(volume) ){  
+  if(  missing(volume) || is.null(volume) || is.na(volume) ){  
     df$vol <- 23
     volume_sym <- rlang::sym("vol")
     
@@ -206,7 +206,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
       forestr::round_df(4)
     df_final[df_final==0] <- ""
     
-  }else if(cc_to_column==T && !is(testesp, "try-error") && is(testvol, "try-error") ){
+  }else if(cc_to_column==T && (!missing(especies)||!is.null(especies)||!is.na(especies)||especies!=F||especies!="") && (missing(volume) || is.null(volume) || is.na(volume)) ){
     
     if(cctc_ha==T){df_final$NI <- df_final$IndvHA}else if(cctc_ha==F){df_final$NI <- df_final$NumIndv}else(stop("cctc_ha must be TRUE or FALSE",call. = F))
     
@@ -220,7 +220,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
     df_final[df_final==0] <- ""
     # Se o usuario quiser o centro de classe na coluna e tiver fornecido volume,
     # popular o centro de classe com o volume
-  }else if(cc_to_column==T && !is(testesp, "try-error") && !is(testvol, "try-error") ){
+  }else if(cc_to_column==T && (!missing(especies)||!is.null(especies)||!is.na(especies)||especies!=F||especies!="") && (!missing(volume) || !is.null(volume) || !is.na(volume)) ){
     
     if(cctc_ha==T){df_final$VOL<- df_final$volume_ha}else if(cctc_ha==F){df_final$VOL<- df_final$volume}else(stop("cctc_ha must be TRUE or FALSE",call. = F))
     
@@ -232,7 +232,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
       forestr::round_df(4)
     df_final[df_final==0] <- ""
     
-  }else if(cc_to_column==T && is(testesp, "try-error") ){
+  }else if(cc_to_column==T && (missing(especies)||is.null(especies)||is.na(especies)||especies==F||especies=="") ){
     
     stop("Especies column must be provided if cc_to_column is true ", call. = F)
     
@@ -449,7 +449,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
       forestr::round_df(4)
     df_final[df_final==0] <- ""
     
-  }else if(cc_to_column==T && !is(testesp, "try-error") && is(testvol, "try-error") ){
+  }else if(cc_to_column==T && (!missing(especies)||!is.null(especies)||!is.na(especies)||especies!=F||especies!="") && (missing(volume) || is.null(volume) || is.na(volume)) ){
     
     if(cctc_ha==T){df_final$NI <- df_final$IndvHA}else if(cctc_ha==F){df_final$NI <- df_final$NumIndv}else(stop("cctc_ha must be TRUE or FALSE",call. = F))
     
@@ -463,7 +463,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
     df_final[df_final==0] <- ""
     # Se o usuario quiser o centro de classe na coluna e tiver fornecido volume,
     # popular o centro de classe com o volume
-  }else if(cc_to_column==T && !is(testesp, "try-error") && !is(testvol, "try-error") ){
+  }else if(cc_to_column==T && (!missing(especies)||!is.null(especies)||!is.na(especies)||especies!=F||especies!="") && (!missing(volume) || !is.null(volume) || !is.na(volume)) ){
     
     if(cctc_ha==T){df_final$VOL<- df_final$volume_ha}else if(cctc_ha==F){df_final$VOL<- df_final$volume}else(stop("cctc_ha must be TRUE or FALSE",call. = F))
     
@@ -475,7 +475,7 @@ classe_diametro <- function(df, dap, parcela, area_parcela, ic = 5, dapmin = 5, 
       forestr::round_df(4)
     df_final[df_final==0] <- ""
     
-  }else if(cc_to_column==T && is(testesp, "try-error") ){
+  }else if(cc_to_column==T && (missing(especies)||is.null(especies)||is.na(especies)||especies==F||especies=="") ){
     
     stop("Especies column must be provided if cc_to_column is true ", call. = F)
     
