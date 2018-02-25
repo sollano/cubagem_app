@@ -17,7 +17,7 @@
 #' CAMPOS, J. C. C.; LEITE, H. G. Mensuracao florestal: perguntas e respostas. 3a. ed. Vicosa: Editora UFV, 2013. 605 p.
 #'
 #' @seealso Funcao complementar:
-#'   \code{\link{ smaliansc }}, para o calculo do volume sem casca.
+#'   \code{\link{smaliansc}}, para o calculo do volume sem casca.
 #'   
 #' @export
 #' @examples
@@ -35,62 +35,91 @@
 #' @author Sollano Rabelo Braga \email{sollanorb@@gmail.com}
 
 smaliancc <- function(df, di, hi, .groups, di_mm_to_cm=FALSE, hi_cm_to_m=FALSE ){
+  # Checagem de variaveis ####
   
-  # se df nao for fornecido, nulo, ou  nao for dataframe, parar
-  if(  missing(df) || is.null(df) || is.na(df) || !is.data.frame(df) ){  
+  # Definir pipe para facilitar
+  `%>%` <- dplyr::`%>%`
+  
+  # se df nao for fornecido, nulo, ou  nao for dataframe, ou nao tiver tamanho e nrow maior que 1,parar
+  if(  missing(df) ){  
     stop("df not set", call. = F) 
+  }else if(!is.data.frame(df)){
+    stop("df must be a dataframe", call.=F)
+  }else if(length(df)<=1 | nrow(df)<=1){
+    stop("Length and number of rows of 'df' must be greater than 1", call.=F)
   }
   
-  # se di nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(di) || is.null(di) || is.na(di) || di == "" || is.null(df[di] ) ){  
+  # se di nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
+  if(  missing(di) ){  
     stop("di not set", call. = F) 
+  }else if( !is.character(di) ){
+    stop("'di' must be a character containing a variable name", call.=F)
+  }else if(length(di)!=1){
+    stop("Length of 'di' must be 1", call.=F)
+  }else if(forestr::check_names(df, di)==F){
+    stop(forestr::check_names(df, di, boolean=F), call.=F)
   }
   
-  # se hi nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(hi) || is.null(hi) || is.na(hi) || hi == "" || is.null(df[hi] ) ){  
+  # se hi nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
+  if(  missing(hi) ){  
     stop("hi not set", call. = F) 
+  }else if( !is.character(hi) ){
+    stop("'hi' must be a character containing a variable name", call.=F)
+  }else if(length(hi)!=1){
+    stop("Length of 'hi' must be 1", call.=F)
+  }else if(forestr::check_names(df, hi)==F){
+    stop(forestr::check_names(df, hi, boolean=F), call.=F)
   }
   
-  # se di_mm_to_cm nao for igual a TRUE ou FALSE
-  if(!   di_mm_to_cm %in% c(TRUE, FALSE, "") ){ 
-    stop("di_mm_to_cm must be equal to TRUE or FALSE", call. = F) 
+  # Se .groups nao for fornecido, criar objeto que dplyr::group_by ignora, sem causar erro
+  if(missing(.groups) && is.null(dplyr::groups(df)) ){
+    stop(".groups must be set if data doesn't have any groups", call. = F)
+  }else if(missing(.groups) && !is.null(dplyr::groups(df)) ){
+    .groups_syms <- rlang::syms(dplyr::groups(df))
+  }else if(!is.character(.groups)){
+    stop(".groups must be a character", call. = F)
+  }else if(! length(.groups)%in% 1:10){
+    stop("Length of '.groups' must be between 1 and 10", call.=F) 
+  }else if(forestr::check_names(df,.groups)==F){
+    # Parar se algum nome nao existir, e avisar qual nome nao existe
+    stop(forestr::check_names(df,.groups, boolean=F), call.=F) 
+  }else{
+    .groups_syms <- rlang::syms(.groups) 
   }
   
-  # se hi_cm_to_m nao for igual a TRUE ou FALSE
-  if(!   hi_cm_to_m %in% c(TRUE, FALSE, "") ){ 
-    stop("hi_cm_to_m must be equal to TRUE or FALSE", call. = F) 
+  # se di_mm_to_cm nao for igual a TRUE ou FALSE,ou nao for de tamanho 1, parar
+  if(! di_mm_to_cm %in% c(TRUE, FALSE) ){ 
+    stop("'di_mm_to_cm' must be equal to TRUE or FALSE", call. = F) 
+  }else  if(length(di_mm_to_cm)!=1){
+    stop("Length of 'di_mm_to_cm' must be 1", call.=F)
   }
-
-  # se .groups nao for fornecido, for igual "", nulo, ou  nao existir no dataframe, parar
-  if(  missing(.groups) || is.null(.groups) || is.na(.groups) || .groups == "" || is.null(df[.groups] ) ){  
-    stop(".groups not set", call. = F) 
+  
+  # se hi_cm_to_m nao for igual a TRUE ou FALSE,ou nao for de tamanho 1, parar
+  if(! hi_cm_to_m %in% c(TRUE, FALSE) ){ 
+    stop("'hi_cm_to_m' must be equal to TRUE or FALSE", call. = F) 
+  }else  if(length(hi_cm_to_m)!=1){
+    stop("Length of 'hi_cm_to_m' must be 1", call.=F)
   }
   
   # Converter diametro da secao de milimetro para centimetro
   if(di_mm_to_cm){
-    
     df[[di]] <- df[[di]]/10
-    
   }
   
   # Converter altura da secao de centimetro para metro
   if(hi_cm_to_m){
-    
     df[[hi]] <- df[[hi]]/100
-    
   }
   
-   df %>% 
-    group_by_(.dots = .groups) %>% 
-    mutate_(
-      .dots = 
-        setNames(
-          list( 
-            lazyeval::interp( ~ ( (di^2* pi) / 40000) , di = as.name(di)), 
-            lazyeval::interp( ~ ((AS + lead(AS) )/2 ) * (lead(hi) - hi) , AS = as.name("AS_CC"),  hi = as.name(hi))
-          ),
-          nm=c("AS_CC", "VCC")
-        )
-    ) %>% 
-     ungroup
+  di_sym <- rlang::sym(di)
+  hi_sym <- rlang::sym(hi)
+  
+  # ####
+  
+  df %>% 
+    dplyr::group_by( !!!.groups_syms,add=T ) %>% 
+    dplyr::mutate( 
+      AS_CC = ( ( (!!di_sym) ^2* pi) / 40000) , 
+      VCC   =  ((AS_CC + dplyr::lead(AS_CC) )/2 ) * (dplyr::lead(!!hi_sym) - (!!hi_sym) ) ) %>% 
+    dplyr::ungroup()
 }
