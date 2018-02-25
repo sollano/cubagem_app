@@ -22,8 +22,8 @@ hubercc <- function(df, di, comp_secao, .groups, di_mm_to_cm=FALSE){
     stop("'di' must be a character containing a variable name", call.=F)
   }else if(length(di)!=1){
     stop("Length of 'di' must be 1", call.=F)
-  }else if(forestr::check_names(df, di)==F){
-    stop(forestr::check_names(df, di, boolean=F), call.=F)
+  }else if(check_names(df, di)==F){
+    stop(check_names(df, di, boolean=F), call.=F)
   }
   
   # se comp_secao nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
@@ -33,8 +33,8 @@ hubercc <- function(df, di, comp_secao, .groups, di_mm_to_cm=FALSE){
     stop("'comp_secao' must be a character containing a variable name", call.=F)
   }else if(length(comp_secao)!=1){
     stop("Length of 'comp_secao' must be 1", call.=F)
-  }else if(forestr::check_names(df, comp_secao)==F){
-    stop(forestr::check_names(df, comp_secao, boolean=F), call.=F)
+  }else if(check_names(df, comp_secao)==F){
+    stop(check_names(df, comp_secao, boolean=F), call.=F)
   }
   
   # Se .groups nao for fornecido, criar objeto que dplyr::group_by ignora, sem causar erro
@@ -46,9 +46,9 @@ hubercc <- function(df, di, comp_secao, .groups, di_mm_to_cm=FALSE){
     stop(".groups must be a character", call. = F)
   }else if(! length(.groups)%in% 1:10){
     stop("Length of '.groups' must be between 1 and 10", call.=F)
-  }else if(forestr::check_names(df,.groups)==F){
+  }else if(check_names(df,.groups)==F){
     # Parar se algum nome nao existir, e avisar qual nome nao existe
-    stop(forestr::check_names(df,.groups, boolean=F), call.=F)
+    stop(check_names(df,.groups, boolean=F), call.=F)
     # se os grupos forem fornecidos e forem nomes dos dados
     # Transformar o objeto em simbolo, para que dplyr entenda
     # e procure o nome das variaveis dentro dos objetos
