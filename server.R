@@ -37,6 +37,7 @@ source("funs/curva_arvore_media.R", encoding="UTF-8")
 source("funs/pow.R"               , encoding="UTF-8")
 source("funs/notin.R"             , encoding="UTF-8")
 source("funs/check_numeric.R"     , encoding="UTF-8")
+source("funs/check_dap_min.R"     , encoding="UTF-8")
 
 # vectors for names ####
 
@@ -548,8 +549,20 @@ shinyServer(function(input, output, session){
     #  need(is.numeric(data[[nm$dap]]), "dap column must be numeric"),
     # need(is.numeric(data[[nm$ht]]), "ht column must be numeric"), errorClass = "WRONG")
     
+    # A seguir sera para definir o dap minimo
     
-    # o primeiro if sera para filtrar as linhas
+    # Primeiro verificamos se o dap minimo iserido pelo usuario
+    # nao ultrapassa os limites do dap fornecido
+    max.val <- max(data[[nm$dap]],na.rm=T)
+    
+    validate(check_dap_min(nm$diam.min,max.val)) 
+    
+    # Caso nao ultrapasse, filtrar
+    data <- data[data[nm$dap]>=nm$diam.min, ] 
+    
+    
+    
+    # o proximo if sera para filtrar as linhas
     
     # se o usuario nao selecionar nada, retorna o dado normal 
     # (isso faz com o que o dado original seja exibido logo que se entra na aba de filtrar),
