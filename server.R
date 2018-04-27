@@ -553,6 +553,7 @@ shinyServer(function(input, output, session){
     
     # Primeiro verificamos se o dap minimo iserido pelo usuario
     # nao ultrapassa os limites do dap fornecido
+    if(nm$dap!=""){
     max.val <- max(data[[nm$dap]],na.rm=T)
     
     validate(check_dap_min(nm$diam.min,max.val)) 
@@ -561,7 +562,7 @@ shinyServer(function(input, output, session){
     if(!is.na(nm$diam.min)){
     data <- data[data[nm$dap]>=nm$diam.min, ] 
     }
-    
+    }
     
     # o proximo if sera para filtrar as linhas
     
