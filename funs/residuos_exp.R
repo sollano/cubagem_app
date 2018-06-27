@@ -1,6 +1,6 @@
 #' @export
 residuos_exp <- function (df, obs, ..., type = "scatterplot",point_size = 3,color = NULL, nrow = NULL,ncol = NULL, 
-                          lim_y = NULL, xlab = NULL, clab=NULL, font = "serif",legend_pos = "bottom",res_table = F){
+                          lim_y = NULL, xlab = NULL, clab=NULL, font = "serif",legend_pos = "bottom",facet_space=0.8,res_table = F){
   DF <- as.data.frame(df)
   OBS <- obs 
   OBSgg <- paste("`",OBS,"`",sep="") #Adiciona "`" para o comeco do nome, para caso a variavel tenha caracteres especiais
@@ -99,7 +99,8 @@ residuos_exp <- function (df, obs, ..., type = "scatterplot",point_size = 3,colo
       axis.line.y = ggplot2::element_line(color = "black"), 
       strip.text.x = ggplot2::element_text(size = 18, face = "bold"),
       legend.text = ggplot2::element_text(size=20), 
-      legend.title = ggplot2::element_text(size=20) ) + 
+      legend.title = ggplot2::element_text(size=20),
+      panel.spacing = ggplot2::unit(facet_space, "lines") ) + 
     ggplot2::guides(
       color=ggplot2::guide_legend(nrow=1,byrow=TRUE),
       fill=ggplot2::guide_legend(nrow=1,byrow=TRUE)) 
