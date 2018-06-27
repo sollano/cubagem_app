@@ -100,6 +100,6 @@ cub_summary <- function(df, dap, ht, vcc, vsc, .groups){
       vars(FFCC, FFSC),                   # especificadas por vars
       funs(medio = mean)    ) %>%             # Fator de forma medio
     dplyr::na_if(0) %>%                              # Se vsc nao for informado, variaveis que o utilizam serao 0, portanto, deve-se converte-las para NA, para depois remove-las
-    dplyr::select_if(Negate(anyNA))                  # remove variaveis que nao foram informadas (argumentos opicionais nao inseridos viram NA)
-  
+    dplyr::select_if(Negate(anyNA)) %>%              # remove variaveis que nao foram informadas (argumentos opicionais nao inseridos viram NA)
+    dplyr::ungroup()
 }
