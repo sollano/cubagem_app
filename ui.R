@@ -51,7 +51,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.0.2",
+          navbarPage("App Cubagem 1.0.3",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
@@ -124,7 +124,7 @@ shinyUI(
                                   
                                   column(4,
                                          wellPanel(
-                                           h3("Diâmetro da seção"),
+                                           h3("*Diâmetro da seção"),
                                            p("Selecione o nome da variável referente à Diâmetro da seção:"#, 
                                              #style = "font-family: 'Source Sans Pro';"
                                            ),
@@ -164,7 +164,7 @@ shinyUI(
                                   
                                   column(4,
                                          wellPanel(
-                                           h3("Diâmetro (DAP)"),
+                                           h3("*Diâmetro (DAP)"),
                                            p("Selecione o nome da variável referente à DAP:"#, 
                                              #style = "font-family: 'Source Sans Pro';"
                                            ),
@@ -188,7 +188,7 @@ shinyUI(
                                   
                                   column(4,
                                          wellPanel(
-                                           h3("Árvore"),
+                                           h3("*Árvore"),
                                            p("Selecione o nome da variável referente à Árvore:"#, 
                                              #style = "font-family: 'Source Sans Pro';"
                                            ),
