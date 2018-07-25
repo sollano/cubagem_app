@@ -1291,10 +1291,10 @@ shinyServer(function(input, output, session){
       grupo <- ""
     }
     
-    schum_cc <- paste("log(",nm$vcc,") ~ log(",nm$dap,") + log(",nm$ht,")",sep=""  )
-    husch_cc <- paste("log(",nm$vcc,") ~ log(",nm$dap,")",sep=""  )
-    spurr_cc <- paste("log(",nm$vcc,") ~ log(pow(",nm$dap,",2)*",nm$ht,")", sep="" )
-    Hohen_cc <- paste("log(",nm$vcc,") ~ ",nm$dap," + ","pow(",nm$dap,",2)",sep=""  )
+    schum_cc <- paste("log(`",nm$vcc,"`) ~ log(`",nm$dap,"`) + log(`",nm$ht,"`)",sep=""  )
+    husch_cc <- paste("log(`",nm$vcc,"`) ~ log(`",nm$dap,"`)",sep=""  )
+    spurr_cc <- paste("log(`",nm$vcc,"`) ~ log(pow(`",nm$dap,"`,2)* `",nm$ht,"`)", sep="" )
+    Hohen_cc <- paste("log(`",nm$vcc,"`) ~ `",nm$dap,"` + ","pow(`",nm$dap,"`,2)",sep=""  )
     
     # Ajustar modelo de Schumacher
     tab <- bind_rows(
@@ -1302,9 +1302,9 @@ shinyServer(function(input, output, session){
         mutate(Nome = "Schumacher  & Hall com casca",
                Modelo = "LN(VCC) = b0 + b1*LN(DAP) + b2*LN(HT) + e" ),
 
-      lm_table(df=dados,modelo = husch_cc, grupo )%>% 
-        mutate(Nome = "Husch com casca",
-               Modelo = "LN(VCC) = b0 + b1*LN(DAP) + e" ),
+     # lm_table(df=dados,modelo = husch_cc, grupo )%>% 
+      #  mutate(Nome = "Husch com casca",
+     #          Modelo = "LN(VCC) = b0 + b1*LN(DAP) + e" ),
       
       lm_table(df=dados,modelo = spurr_cc, grupo )%>% 
         mutate(Nome = "Spurr com casca",
@@ -1318,10 +1318,10 @@ shinyServer(function(input, output, session){
     # Se o Volume sem casca for calculado, ajustar modelo sem casca
     if(suppressWarnings(!is.null(dados$VSC))){
       
-      schum_sc <- paste("log(",nm$vsc,") ~ log(",nm$dap,") + log(",nm$ht,")",sep=""  )
-      husch_sc <- paste("log(",nm$vsc,") ~ log(",nm$dap,")",sep=""  )
-      spurr_sc <- paste("log(",nm$vsc,") ~  log(pow(",nm$dap,",2)*",nm$ht,")", sep="" )
-      Hohen_sc <- paste("log(",nm$vsc,") ~ ",nm$dap," + ","pow(",nm$dap,",2)",sep=""  )
+      schum_sc <- paste("log(`",nm$vsc,"`) ~ log(`",nm$dap,"`) + log(`",nm$ht,"`)",sep=""  )
+      husch_sc <- paste("log(`",nm$vsc,"`) ~ log(`",nm$dap,"`)",sep=""  )
+      spurr_sc <- paste("log(`",nm$vsc,"`) ~ log(pow(`",nm$dap,"`,2)* `",nm$ht,"`)", sep="" )
+      Hohen_sc <- paste("log(`",nm$vsc,"`) ~ `",nm$dap,"` + ","pow(`",nm$dap,"`,2)",sep=""  )
       
       
       tab <- bind_rows(tab,
@@ -1329,9 +1329,9 @@ shinyServer(function(input, output, session){
                      mutate(Nome = "Schumacher & Hall sem casca",
                             Modelo = "LN(VSC) = b0 + b1*LN(DAP) + b2*LN(HT) + e" ),
                    
-                   lm_table(df=dados,modelo = husch_sc, grupo )%>% 
-                     mutate(Nome = "Husch sem casca",
-                            Modelo = "LN(VSC) = b0 + b1*LN(DAP) + e" ),
+            #       lm_table(df=dados,modelo = husch_sc, grupo )%>% 
+             #        mutate(Nome = "Husch sem casca",
+            #                Modelo = "LN(VSC) = b0 + b1*LN(DAP) + e" ),
                    
                    lm_table(df=dados,modelo = spurr_sc, grupo )%>% 
                      mutate(Nome = "Spurr sem casca",
@@ -1411,10 +1411,10 @@ shinyServer(function(input, output, session){
       grupo <- ""
       tab <- tibble()
     }
-    schum_cc <- paste("log(",nm$vcc,") ~ log(",nm$dap,") + log(",nm$ht,")",sep=""  )
-    #husch_cc <- paste("log(",nm$vcc,") ~ log(",nm$dap,")",sep=""  )
-    spurr_cc <- paste("log(",nm$vcc,") ~  log(pow(",nm$dap,",2)*",nm$ht,")", sep="" )
-    Hohen_cc <- paste("log(",nm$vcc,") ~ ",nm$dap," + ","pow(",nm$dap,",2)",sep=""  )
+    schum_cc <- paste("log(`",nm$vcc,"`) ~ log(`",nm$dap,"`) + log(`",nm$ht,"`)",sep=""  )
+    husch_cc <- paste("log(`",nm$vcc,"`) ~ log(`",nm$dap,"`)",sep=""  )
+    spurr_cc <- paste("log(`",nm$vcc,"`) ~ log(pow(`",nm$dap,"`,2)* `",nm$ht,"`)", sep="" )
+    Hohen_cc <- paste("log(`",nm$vcc,"`) ~ `",nm$dap,"` + ","pow(`",nm$dap,"`,2)",sep=""  )
     
     tab <- tibble(
       
@@ -1443,10 +1443,10 @@ shinyServer(function(input, output, session){
     
     if(nm$vsc!=""){
       
-      schum_sc <- paste("log(",nm$vsc,") ~ log(",nm$dap,") + log(",nm$ht,")",sep=""  )
-      #husch_sc <- paste("log(",nm$vsc,") ~ log(",nm$dap,")",sep=""  )
-      spurr_sc <- paste("log(",nm$vsc,") ~  log(pow(",nm$dap,",2)*",nm$ht,")", sep="" )
-      Hohen_sc <- paste("log(",nm$vsc,") ~ ",nm$dap," + ","pow(",nm$dap,",2)",sep=""  )
+      schum_sc <- paste("log(`",nm$vsc,"`) ~ log(`",nm$dap,"`) + log(`",nm$ht,"`)",sep=""  )
+      husch_sc <- paste("log(`",nm$vsc,"`) ~ log(`",nm$dap,"`)",sep=""  )
+      spurr_sc <- paste("log(`",nm$vsc,"`) ~ log(pow(`",nm$dap,"`,2)* `",nm$ht,"`)", sep="" )
+      Hohen_sc <- paste("log(`",nm$vsc,"`) ~ `",nm$dap,"` + ","pow(`",nm$dap,"`,2)",sep=""  )
       
       tab <- tab %>% 
         mutate(
