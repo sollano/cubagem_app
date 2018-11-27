@@ -497,7 +497,7 @@ shinyServer(function(input, output, session){
     write.csv(df_up,file = fn)
     
     # manda pro drive
-    drive_upload(fn, paste("CubagemApp",fn,sep="/"),verbose = F)
+    suppressMessages(drive_upload(fn, paste("CubagemApp",fn,sep="/"),verbose = F))
     
     # delete arquivo temporario
     unlink(fn)
