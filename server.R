@@ -465,9 +465,6 @@ shinyServer(function(input, output, session){
     
     validate(need( !is.null(upData()) , "" )  )
     
-    # Faz login na conta do google usando o token
-    suppressMessages(googlesheets::gs_auth(token = "googlesheets_token.rds",verbose = FALSE))
-    
     #pegar os nomes
     varnames <- varnames()
     
@@ -484,11 +481,14 @@ shinyServer(function(input, output, session){
                      vcc           = varnames$vcc,
                      vsc           = varnames$vsc)
     
+    # Faz login na conta do google usando o token
+    #suppressMessages(googlesheets::gs_auth(token = "googlesheets_token.rds",verbose = FALSE))
+    
     # Manda o arquivo para a conta da google, no google spreadsheets
     #googlesheets::gs_new(title=paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),sep = "_"),input = df_up,trim = FALSE,verbose = FALSE)
     
     #login
-    drive_auth("googlesheets_token.rds",verbose = F)
+    suppressMessages(drive_auth("googlesheets_token.rds",verbose = F))
     
     #nome do arquivo
     fn <-paste(Sys.Date(),format(Sys.time(),"%H_%M_%S"),round(abs(rnorm(1,1,1)),2),"cub_app",".csv",sep = "_")
