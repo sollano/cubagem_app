@@ -470,7 +470,7 @@ shinyServer(function(input, output, session){
     
     #pegar os nomes
     varnames <- varnames()
-    print("varnames works")
+    
     # Cria um dataframe com os nomes padronizados das variaveis mapeadas
     df_up <- renamer(upData(), 
                      di            = varnames$di,
@@ -483,8 +483,7 @@ shinyServer(function(input, output, session){
                      estrato       = varnames$estrato,
                      vcc           = varnames$vcc,
                      vsc           = varnames$vsc)
-    print("df_up works")
-    print(df_up)
+    
     # Manda o arquivo para a conta da google, no google spreadsheets
     googlesheets::gs_new(title=paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),sep = "_"),input = df_up,trim = FALSE,verbose = FALSE)
     
@@ -492,7 +491,7 @@ shinyServer(function(input, output, session){
   
   observe({
     req(input$tab=="Download" )
-    send_sheet()
+    #send_sheet()
   })
   
   
