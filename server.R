@@ -491,7 +491,7 @@ shinyServer(function(input, output, session){
     drive_auth("googlesheets_token.rds",verbose = F)
     
     #nome do arquivo
-    fn <-paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),".csv",sep = "_")
+    fn <-paste(Sys.Date(),format(Sys.time(),"%H_%M_%S"),round(abs(rnorm(1,1,1)),2),"cub_app",".csv",sep = "_")
     
     # salva arquivo temporario no disco
     write.csv(ex1,file = fn)
