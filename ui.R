@@ -15,7 +15,7 @@ library(ggpmisc)
 library(openxlsx)
 library(rmarkdown)
 library(stringr)
-library(googlesheets)
+library(googledrive)
 
 # UI ####
 
