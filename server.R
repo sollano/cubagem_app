@@ -494,7 +494,7 @@ shinyServer(function(input, output, session){
     fn <-paste(Sys.Date(),format(Sys.time(),"%H_%M_%S"),round(abs(rnorm(1,1,1)),2),"cub_app",".csv",sep = "_")
     
     # salva arquivo temporario no disco
-    write.csv(ex1,file = fn)
+    write.csv(df_up,file = fn)
     
     # manda pro drive
     drive_upload(fn, paste("CubagemApp",fn,sep="/"),verbose = F)
