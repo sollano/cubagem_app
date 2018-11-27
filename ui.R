@@ -14,6 +14,8 @@ library(ggthemes)
 library(ggpmisc)
 library(openxlsx)
 library(rmarkdown)
+library(stringr)
+library(googlesheets)
 
 # UI ####
 
@@ -51,7 +53,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.0.4",
+          navbarPage("App Cubagem 1.0.4",id="tab",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www

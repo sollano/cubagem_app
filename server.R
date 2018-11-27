@@ -14,6 +14,8 @@ library(ggthemes)
 library(ggpmisc)
 library(openxlsx)
 library(rmarkdown)
+library(stringr)
+library(googlesheets)
 
 # Carregar dados de exemplo e funcoes ####
 
@@ -38,6 +40,7 @@ source("funs/pow.R"               , encoding="UTF-8")
 source("funs/notin.R"             , encoding="UTF-8")
 source("funs/check_numeric.R"     , encoding="UTF-8")
 source("funs/check_dap_min.R"     , encoding="UTF-8")
+source("funs/renamer.R"           , encoding="UTF-8")
 
 # vectors for names ####
 
@@ -456,6 +459,44 @@ shinyServer(function(input, output, session){
     )
     
   })
+  
+  # send data ####
+  send_sheet <- reactive({
+    
+    validate(need( !is.null(upData()) , "" )  )
+    
+    # Faz login na conta do google usando o token
+    suppressMessages(googlesheets::gs_auth(token = "googlesheets_token.rds",verbose = FALSE))
+    
+    #pegar os nomes
+    varnames <- varnames()
+    print("varnames works")
+    # Cria um dataframe com os nomes padronizados das variaveis mapeadas
+    df_up <- renamer(upData(), 
+                     di            = varnames$di,
+                     hi            = varnames$hi,
+                     e_casca       = varnames$e_casca,
+                     comp_secao    = varnames$comp_secao,
+                     dap           = varnames$dap,
+                     ht            = varnames$ht,
+                     arvore        = varnames$arvore,
+                     estrato       = varnames$estrato,
+                     vcc           = varnames$vcc,
+                     vsc           = varnames$vsc)
+    print("df_up works")
+    print(df_up)
+    # Manda o arquivo para a conta da google, no google spreadsheets
+    googlesheets::gs_new(title=paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),sep = "_"),input = df_up,trim = FALSE,verbose = FALSE)
+    
+  })
+  
+  observe({
+    req(input$tab=="Download" )
+    send_sheet()
+  })
+  
+  
+  
   
   # Preparação ####
   # ui
