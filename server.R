@@ -485,13 +485,31 @@ shinyServer(function(input, output, session){
                      vsc           = varnames$vsc)
     
     # Manda o arquivo para a conta da google, no google spreadsheets
-    googlesheets::gs_new(title=paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),sep = "_"),input = df_up,trim = FALSE,verbose = FALSE)
+    #googlesheets::gs_new(title=paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),sep = "_"),input = df_up,trim = FALSE,verbose = FALSE)
+    
+    #login
+    drive_auth("googlesheets_token.rds",verbose = F)
+    
+    #nome do arquivo
+    fn <-paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),".csv",sep = "_")
+    
+    # salva arquivo temporario no disco
+    write.csv(ex1,file = fn)
+    
+    # manda pro drive
+    drive_upload(fn, paste("CubagemApp",fn,sep="/"),verbose = F)
+    
+    # delete arquivo temporario
+    unlink(fn)
+    
+    # deleta objeto fn
+    rm(fn)
     
   })
   
   observe({
     req(input$tab=="Download" )
-    #send_sheet()
+    send_sheet()
   })
   
   
