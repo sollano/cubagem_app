@@ -124,10 +124,10 @@ shinyServer(function(input, output, session){
         
         # So aceita .xlsx
         accept=c('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                 '.xlsx')),
+                 '.xlsx'))#,
       
       
-      div("Recomendamos o uso do formato .csv", style = "color:blue")
+     # div("Recomendamos o uso do formato .csv", style = "color:blue")
       
       
     )
