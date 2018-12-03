@@ -165,7 +165,7 @@ shinyServer(function(input, output, session){
     } else {
       file.copy(inFile$datapath,
                 paste(inFile$datapath, "xlsx", sep="."))
-      raw_data <-  readxl::read_excel(paste(inFile$datapath, "xlsx", sep="."), input$sheet_n, na = c("","NA")) 
+      raw_data <-  readxl::read_xlsx(paste(inFile$datapath, "xlsx", sep="."), input$sheet_n, na = c("","NA")) 
       #raw_data <-  openxlsx::read.xlsx(paste(inFile$datapath, "xlsx", sep="."), input$sheet_n) 
       raw_data <- as.data.frame(raw_data)
     }
