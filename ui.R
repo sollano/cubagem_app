@@ -238,7 +238,7 @@ shinyUI(
                                     numericInput("int.classe.dap", "Insira o intervalo de classe:", 5, 1, 50, 0.5),
                                     
                                     h4("Diâmetro mínimo"),
-                                    numericInput("diam.min", "Insira o diâmetro mínimo:", 5, 1, 100, 1),
+                                    numericInput("diam.min", "Insira o diâmetro mínimo:", 0, 0, 100, 1),
                                     
                                     h3("Converter diâmetro da seção de milímetro para centímetro?"),
                                     radioButtons("di_to_cm","Marcar 'Sim' caso o diametro da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE, inline = TRUE),

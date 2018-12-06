@@ -627,7 +627,7 @@ shinyServer(function(input, output, session){
     
     # Caso nao ultrapasse, filtrar
     if(!is.na(nm$diam.min)){
-    data <- data[data[nm$dap]>=nm$diam.min, ] 
+      data <- data %>% dplyr::filter(is.na(.data[[nm$dap]]) | .data[[nm$dap]] >= nm$diam.min)
     }
     }
     
