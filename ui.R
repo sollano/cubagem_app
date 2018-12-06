@@ -53,7 +53,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.0.6",id="tab",
+          navbarPage("App Cubagem 1.0.7",id="tab",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
@@ -248,10 +248,7 @@ shinyUI(
                               
                                     h3("Converter espessura da casca de milímetro para centímetro?"),
                                     radioButtons("e_casca_to_cm","Marcar 'Sim' caso a espessura da casca da seção esteja em milímetro",c("Sim"=TRUE,"Nao"=FALSE), selected = TRUE, inline = TRUE),
- 
-                                    h3("Transformar zero em NA"),
-                                    radioButtons("zero_to_NA","Transformar zeros em variávies numéricas em NA? (recomendado)",c("Sim"=TRUE,"Nao"=FALSE), inline = TRUE),
-                                    
+
                                     h3("Filtrar dados"),
                                     
                                     uiOutput("rm_data_var"),
