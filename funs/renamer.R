@@ -21,7 +21,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se arvore nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(arvore) ){  
+  if(  missing(arvore) || is.null(arvore) || is.na(arvore) || arvore=="" ){  
     
   }else if( !is.character(arvore) ){
   }else if(length(arvore)!=1){
@@ -34,7 +34,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   
   # se parcelas nao for fornecido, nulo, ou  nao for dataframe, ou nao tiver tamanho e nrow maior que 1,parar
   # se parcelas nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(parcelas) ){  
+  if(  missing(parcelas) || is.null(parcelas) || is.na(parcelas) || parcelas=="" ){  
   }else if( !is.character(parcelas) ){
   }else if(length(parcelas)!=1){
     stop("Length of 'parcelas' must be 1", call.=F)
@@ -45,8 +45,8 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se especies nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(especies) ){  
-   
+  if(  missing(especies) || is.null(especies) || is.na(especies) || especies=="" ){  
+    
   }else if( !is.character(especies) ){
   }else if(length(especies)!=1){
     stop("Length of 'especies' must be 1", call.=F)
@@ -57,7 +57,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se cap nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(cap) ){  
+  if(  missing(cap) || is.null(cap) || is.na(cap) || cap=="" ){  
     
   }else if( !is.character(cap) ){
   }else if(length(cap)!=1){
@@ -69,7 +69,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se dap nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(dap) ){  
+  if(  missing(dap) || is.null(dap) || is.na(dap) || dap=="" ){  
     
   }else if( !is.character(dap) ){
   }else if(length(dap)!=1){
@@ -81,7 +81,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se ht nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(ht) ){  
+  if(  missing(ht) || is.null(ht) || is.na(ht) || ht=="" ){  
     
   }else if( !is.character(ht) ){
   }else if(length(ht)!=1){
@@ -93,7 +93,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se vcc nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(vcc) ){  
+  if(  missing(vcc) || is.null(vcc) || is.na(vcc) || vcc=="" ){  
     
   }else if( !is.character(vcc) ){
   }else if(length(vcc)!=1){
@@ -105,7 +105,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se vsc nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(vsc) ){  
+  if(  missing(vsc) || is.null(vsc) || is.na(vsc) || vsc=="" ){  
     
   }else if( !is.character(vsc) ){
     
@@ -118,7 +118,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se area.parcela nao for fornecido, nao for numerico nem character, ou nao existir no dataframe,ou nao for de tamanho 1, parar
-  if(  missing(area.parcela) ){  
+  if(  missing(area.parcela) || is.null(area.parcela) || is.na(area.parcela) || area.parcela=="" ){  
     
   }else if( is.null(area.parcela) || is.na(area.parcela) || area.parcela == "" ){
   
@@ -137,7 +137,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se area.total nao for fornecido, nao for numerico nem character, ou nao existir no dataframe,ou nao for de tamanho 1, parar
-  if(  missing(area.total) ){  
+  if(  missing(area.total) || is.null(area.total) || is.na(area.total) || area.total=="" ){  
   }else if( is.null(area.total) || is.na(area.total) || area.total == "" ){
   }else if(is.numeric(area.total) & length(area.total)==1){
 
@@ -153,7 +153,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se est.vertical nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(est.vertical) ){  
+  if(  missing(est.vertical) || is.null(est.vertical) || is.na(est.vertical) || est.vertical=="" ){  
   }else if( !is.character(est.vertical) ){
   }else if(length(est.vertical)!=1){
     stop("Length of 'est.vertical' must be 1", call.=F)
@@ -164,7 +164,7 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se est.interna nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(est.interna) ){  
+  if(  missing(est.interna) || is.null(est.interna) || is.na(est.interna) || est.interna=="" ){  
   }else if( !is.character(est.interna) ){
   }else if(length(est.interna)!=1){
     stop("Length of 'est.interna' must be 1", call.=F)
@@ -175,14 +175,31 @@ renamer <- function(df, arvore,parcelas,especies,cap,dap,ht,
   }
   
   # se estrato nao for fornecido nao for character, ou nao for um nome de variavel,ou nao for de tamanho 1, parar
-  if(  missing(estrato) ){  
+  if(  missing(estrato) || is.null(estrato) || is.na(estrato) || estrato=="" ){
+    
   }else if( !is.character(estrato) ){
-  }else if(length(estrato)!=1){
-    stop("Length of 'estrato' must be 1", call.=F)
   }else if(check_names(df, estrato)==F){
     
   }else{
-    dfmod[["estrato"]] <- df[[estrato]]
+    
+    # Se tiver um estrato so, o nome vai ser estrato,
+    # se tiver mais de um, vai ser estrato1, esterato2, etc
+    if(length(estrato)==1){
+      lista_var_novas <- "estrato"
+    }else{lista_var_novas <- paste("estrato", 1:length(estrato),sep="")}
+    
+    # funcao para adicionar varios estratos
+    ft <- function(var1,var2,df1,df2){df1[[var1]] <- df2[[var2]]; return(df1[var1]) }
+    
+    # cria as colunas separadas com os nomes de 1 a n.
+    # depois junta com o dado original utilizando bind_cols
+    dfmod <- as.data.frame(
+      dplyr::bind_cols(
+        purrr::map2(.x = lista_var_novas, .y = estrato, ~ft(.x,.y, dfmod, df ) ),
+        dfmod
+      )
+    )
+    
   }
   
   # se hd nao for fornecido, for igual "", nulo ou NA, criar variavel vazia 
