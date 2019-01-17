@@ -53,7 +53,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.0.7",id="tab",
+          navbarPage("App Cubagem 1.0.8",id="tab",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
@@ -307,7 +307,7 @@ shinyUI(
                                 
                                 fluidRow(
                                   column( 3,  sliderInput("calc_vol_cd", 
-                                                          label = "Selecione o numero de casas decimais:", 
+                                                          label = "Número de casas decimais:", 
                                                           min = 1, 
                                                           max = 9, 
                                                           value = 4,
@@ -315,7 +315,7 @@ shinyUI(
                                   
                                   column(3,
                                          radioButtons("data_vol_summary",
-                                                      "Método de volume que deve ser utilizado:",
+                                                      h4("Fórmula para cálculo:"),
                                                       c("Smalian","Huber"), inline = TRUE)
                                   )
                                 ),
@@ -334,7 +334,7 @@ shinyUI(
                      
                      
                      # tabPanel Analise descritiva ####
-                     tabPanel("Analise descritiva",
+                     tabPanel("Análise descritiva",
                               
                               fluidPage(
                                 h1("Análise descritiva", style = "text-align: center;"),
@@ -378,7 +378,7 @@ shinyUI(
                                   
                                   column(3,
                                          radioButtons("ajuste_p_estrato",
-                                                      "Ajustar modelos por estrato?",
+                                                      h4("Ajustar modelos por estrato?"),
                                                       c("Sim"=TRUE,"Nao"=FALSE), selected = FALSE,inline = TRUE)
                                          
                                   )
