@@ -472,7 +472,7 @@ shinyServer(function(input, output, session){
   observeEvent(input$ipid,once=TRUE,eventExpr={
     
     # add require pra so rodar quando conseguir o ip
-    req(input$ipid!="")
+    req(input$ipid!="" & input$fingerprint!="")
     
     fingerprint <- input$fingerprint
     ipid <- input$ipid
