@@ -16,6 +16,8 @@ library(openxlsx)
 library(rmarkdown)
 library(stringr)
 library(googledrive)
+library(googlesheets)
+library(rgeolocate)
 
 # Carregar dados de exemplo e funcoes ####
 
