@@ -16,6 +16,28 @@ library(openxlsx)
 library(rmarkdown)
 library(stringr)
 library(googledrive)
+library(googlesheets)
+library(rgeolocate)
+
+inputUserid <- function(inputId, value='') {
+  #   print(paste(inputId, "=", value))
+  tagList(
+    singleton(tags$head(tags$script(src = "js/md5.js", type='text/javascript'))),
+    singleton(tags$head(tags$script(src = "js/shinyBindings.js", type='text/javascript'))),
+    tags$body(onload="setvalues()"),
+    tags$input(id = inputId, class = "userid", value=as.character(value), type="text", style="display:none;")
+  )
+}
+
+inputIp <- function(inputId, value=''){
+  tagList(
+    singleton(tags$head(tags$script(src = "js/md5.js", type='text/javascript'))),
+    singleton(tags$head(tags$script(src = "js/shinyBindings.js", type='text/javascript'))),
+    tags$body(onload="setvalues()"),
+    tags$input(id = inputId, class = "ipaddr", value=as.character(value), type="text", style="display:none;")
+  )
+}
+
 
 # UI ####
 
@@ -53,7 +75,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.0.8",id="tab",
+          navbarPage("App Cubagem 1.1.0",id="tab",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
@@ -61,6 +83,12 @@ shinyUI(
                      
                      # Painel Intro ####          
                      tabPanel( "Intro" ,
+                               
+                               # logging ####
+                               inputIp("ipid"),
+                               inputUserid("fingerprint"),
+                               # ####
+                               
                                fluidRow(
                                  column(5,
                                         includeMarkdown("about.md")
