@@ -18,6 +18,7 @@ library(stringr)
 library(googledrive)
 library(googlesheets)
 library(rgeolocate)
+library(shinyalert)
 
 inputUserid <- function(inputId, value='') {
   #   print(paste(inputId, "=", value))
@@ -75,7 +76,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.1.0",id="tab",
+          navbarPage("App Cubagem 1.1.1",id="tab",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
@@ -441,6 +442,8 @@ shinyUI(
                                 tabsetPanel(
                                   tabPanel("Download de tabelas", 
                                            fluidPage(
+                                             
+                                             shinyalert::useShinyalert(),
                                              
                                              
                                              h2("Download de tabelas", style = "text-align: center;"),
