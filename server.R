@@ -45,6 +45,8 @@ source("funs/notin.R"             , encoding="UTF-8")
 source("funs/check_numeric.R"     , encoding="UTF-8")
 source("funs/check_dap_min.R"     , encoding="UTF-8")
 source("funs/renamer.R"           , encoding="UTF-8")
+source("funs/selecter.R"          , encoding="UTF-8")
+
 
 # vectors for names ####
 
@@ -716,7 +718,7 @@ shinyServer(function(input, output, session){
     
     # Converter zero em NA em dados numericos quando dado tiver mais de 1 linha
     if(nrow(data)>0){
-      data <- data %>% dplyr::mutate_if(is.numeric, funs(dplyr::na_if(.,0)) ) 
+      data <- data %>% dplyr::mutate_if(is.numeric, list(~dplyr::na_if(.,0)) ) 
     }
     
     # converter valores
@@ -747,7 +749,24 @@ shinyServer(function(input, output, session){
       data <- data[ -insconsist_rows ,  ]
     }
     
+    
+    # Cria um dataframe com os nomes padronizados das variaveis mapeadas
+    data <- selecter(data, 
+                     di            = nm$di,
+                     hi            = nm$hi,
+                     e_casca       = nm$e_casca,
+                     comp_secao    = nm$comp_secao,
+                     dap           = nm$dap,
+                     ht            = nm$ht,
+                     arvore        = nm$arvore,
+                     estrato       = nm$estrato,
+                     vcc           = nm$vcc,
+                     vsc           = nm$vsc)
+    
+    
+    
     data
+    
     
   })
 
