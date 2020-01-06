@@ -1,18 +1,65 @@
 # App Cubagem
 
-<div style="text-align:justify">
-Informações necessárias ao manejo e planejamento de povoamentos, que normalmente são referentes ao volume de madeira e/ou outra variável dendrométrica, no sentido qualitativo e quantitativo, são obtidas por meio do inventário florestal.
-O volume de árvores individual geralmente é estimado a partir de modelos estatísticos ajustados utilizando árvores cubadas.
-Com este app é possível calcular o volume real de árvores cubadas pelos métodos de Smalian e Huber, além de ajustar modelos volumétricos e verificar a qualidade do ajuste.
-</div>
-
-## Ajude esse projeto a se manter no ar!
+### Ajude o nosso projeto a se manter no ar!
 
 <div style="text-align:justify">
-Esse projeto foi criado com o intuito de ajudar a comunidade florestal. Para continuarmos a mantê-lo de forma gratuita a todos,
-precisamos de doações para cobrir os custos do servidor que mantêm esse aplicativo no ar. Sua contribução é de grande ajuda.
-Para doar, basta clicar no botão abaixo:
+O projeto foi criado com o intuito de ajudar a comunidade florestal. Para continuarmos a mantê-lo de forma gratuita a todos,
+precisamos de doações para cobrir os custos do servidor que mantêm o app disponível. Sua contribução é de grande ajuda.
 </div>
+
+
+## Apoiadores do Mês 
+
+<div><p style="float:left;"><a href="https://www.linkedin.com/in/marcio-manfrenato-80032ba6/"><img src="www/marciomanfrenato.jpg" width="100" height="100"/></a></p>
+  
+<p><font size="5">  Marcio Manfrenato</font></p>
+    
+<p><font size="4"> R$ 150,00 </font></p>
+      
+<p><font size="4"><a href="https://www.linkedin.com/in/marcio-manfrenato-80032ba6/">LinkedIn</a></font></p>
+        
+</div>
+        
+<div style="clear: left;"></div>
+
+<div><p style="float:left;"><a href="https://www.linkedin.com/in/fernanda-luiza-silva-de-oliveira-0a3bbb43/"><img src="www/fernandaoliveira.jfif" width="100" height="100"/></a></p>
+  
+<p><font size="5">  Fernanda Luiza Silva de Oliveira</font></p>
+    
+<p><font size="4"> R$ 80,00</font></p>
+      
+<p><font size="4"><a href="https://www.linkedin.com/in/fernanda-luiza-silva-de-oliveira-0a3bbb43/">LinkedIn</a></font></p>
+        
+</div>
+        
+<div style="clear: left;"></div>
+
+
+<div><p style="float:left;"><a href="https://www.linkedin.com/in/jorge-luiz-b-mainart-15442866/M"><img src="www/jorgemainart.jfif" width="100" height="100"/></a></p>
+  
+<p><font size="5">  Jorge Luiz B. Mainart</font></p>
+    
+<p><font size="4"> R$ 75,00</font></p>
+      
+<p><font size="4"><a href="https://www.linkedin.com/in/jorge-luiz-b-mainart-15442866/">LinkedIn</a></font></p>
+        
+</div>
+        
+<div style="clear: left;"></div>
+
+<div><p style="float:left;"><a href="https://www.linkedin.com/in/karize-patriota-80927258/"><img src="www/karizepatriota.jfif" width="100" height="100"/></a></p>
+  
+<p><font size="5">  Karize Patriota</font></p>
+    
+<p><font size="4"> R$ 50,00</font></p>
+      
+<p><font size="4"><a href="https://www.linkedin.com/in/karize-patriota-80927258/">LinkedIn</a></font></p>
+        
+</div>
+        
+<div style="clear: left;"></div>
+
+<p><font size="3">  Para contribuir com o nosso projeto, basta clicar no botão abaixo!</font></p>
 
 <div style="text-align:center">
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -23,11 +70,18 @@ Para doar, basta clicar no botão abaixo:
 </form>
 </div>
 
+## Sobre:
+<div style="text-align:justify">
+Informações necessárias ao manejo e planejamento de povoamentos, que normalmente são referentes ao volume de madeira e/ou outra variável dendrométrica, no sentido qualitativo e quantitativo, são obtidas por meio do inventário florestal.
+O volume de árvores individual geralmente é estimado a partir de modelos estatísticos ajustados utilizando árvores cubadas.
+Com este app é possível calcular o volume real de árvores cubadas pelos métodos de Smalian e Huber, além de ajustar modelos volumétricos e verificar a qualidade do ajuste.
+</div>
+
 Conheça nossos outros projetos:
-[App Inventário Florestal](http://34.234.76.169/shiny/inventario_app/),
-[App Inventário de Nativas](http://34.234.76.169/shiny/nativas_app/),
-[App Economia Florestal](http://34.234.76.169/shiny/forest_economy_app/),
-[App F de Graybill](http://34.234.76.169/shiny/graybill_app/),
+[App Inventário Florestal](http://52.87.251.141/shiny/inventario_app/),
+[App Inventário de Nativas](http://52.87.251.141/shiny/nativas_app/),
+[App Economia Florestal](http://52.87.251.141/shiny/forest_economy_app/),
+[App F de Graybill](http://52.87.251.141/shiny/graybill_app/),
 [R package: forestmangr](https://github.com/sollano/forestmangr#readme)
 
 #### Para citar e referenciar este app, utilize:
@@ -36,7 +90,7 @@ Conheça nossos outros projetos:
 
 BRAGA, S. R.; GORGENS, E. B; OLIVEIRA, M. L. R. DE. App Cubagem: Aplicativo shiny para processamento de dados de cubagem, 2017. Disponível em: <https://sites.google.com/view/forestsuite/home>.
 
-### Script criado por:
+### Desenvolvido por:
 
 [Sollano Rabelo Braga](http://lattes.cnpq.br/7271838547135276 "Curriculum Lattes"), [Marcio Leles R. de Oliveira](http://lattes.cnpq.br/1808132114787261 "Curriculum Lattes") & [Eric Bastos Gorgens](http://lattes.cnpq.br/2266409430041146 "Curriculum Lattes")
 
