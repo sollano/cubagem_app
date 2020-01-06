@@ -92,7 +92,7 @@ BRAGA, S. R.; GORGENS, E. B; OLIVEIRA, M. L. R. DE. App Cubagem: Aplicativo shin
 
 ### Desenvolvido por:
 
-[Sollano Rabelo Braga](http://lattes.cnpq.br/7271838547135276 "Curriculum Lattes"), [Marcio Leles R. de Oliveira](http://lattes.cnpq.br/1808132114787261 "Curriculum Lattes") & [Eric Bastos Gorgens](http://lattes.cnpq.br/2266409430041146 "Curriculum Lattes")
+[Sollano Rabelo Braga](https://www.linkedin.com/in/sollano/ "LinkedIn"), [Marcio Leles R. de Oliveira](http://lattes.cnpq.br/1808132114787261 "Curriculum Lattes") & [Eric Bastos Gorgens](http://lattes.cnpq.br/2266409430041146 "Curriculum Lattes")
 
 ### Referências:
 
