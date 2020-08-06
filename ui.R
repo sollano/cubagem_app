@@ -18,7 +18,32 @@ library(stringr)
 library(googledrive)
 library(googlesheets)
 library(rgeolocate)
-library(shinyalert)
+#library(googledrive)
+library(googlesheets)
+library(rgeolocate)
+#library(shinyalert)
+suppressPackageStartupMessages(library(shinyBS))
+#suppressPackageStartupMessages(library(shinyjs))
+
+
+bsModalNoClose <-function(...) {
+  b = shinyBS::bsModal(...)
+  b[[2]]$`data-backdrop` = "static"
+  b[[2]]$`data-keyboard` = "false"
+  return(b)
+}
+
+
+labelMandatory <- function(label) {
+  tagList(
+    label,
+    span("*", class = "mandatory_star")
+  )
+}
+
+appCSS <-
+  ".mandatory_star { color: red; }"
+
 
 inputUserid <- function(inputId, value='') {
   #   print(paste(inputId, "=", value))
@@ -76,7 +101,7 @@ shinyUI(
           
           
           # Version ####
-          navbarPage("App Cubagem 1.2.0",id="tab",
+          navbarPage("App Cubagem 1.3.0",id="tab",
           # ####           
                      theme = "green_yeti2.css",
                      # theme = "green.css", # seleciona um tema contido na pasta www
@@ -431,6 +456,36 @@ shinyUI(
                      # navbarMenu  Download ####
                      tabPanel("Download",
                               # Painel Download Tabelas ####
+                              
+                              #shinyjs e mandatorio para escondermos o botao de enviar antes de tudo ser preenchido
+                              shinyjs::useShinyjs(),
+                              # css pra fazer o asterisco vermelho
+                              shinyjs::inlineCSS(appCSS),
+                              
+                              bsModalNoClose(id="formbs",
+                                             #"Por favor preencha essas informações antes de fazer o download",
+                                             "Para prosseguir para o download, por favor preencha as informações abaixo",
+                                             trigger= 'downloadtab',
+                                             div(
+                                               id = "form",
+                                               h3("Por favor, preencha as informações abaixo para fazer o download", 
+                                                  style = "text-align: center;"),
+                                               textInput("name", labelMandatory("Nome"), ""),
+                                               textInput("email", labelMandatory("e-mail")),
+                                               textInput("cidade", labelMandatory("Cidade"), ""),
+                                               textInput("estado", labelMandatory("Estado"), ""),
+                                               radioButtons("prof", labelMandatory("Profissão"),
+                                                            c( "Eng. Florestal","Estudante",
+                                                               "Eng. Agrônomo", "Biólogo", "Outro"),inline=TRUE,selected = character(0)),
+                                               textInput("emp_inst", labelMandatory("Empresa/Instituição"), ""),
+                                               radioButtons("motiv", labelMandatory("Aplicação do app"),
+                                                            c( "Consultoria","Pesquisa", "Outro"),inline=TRUE,selected = character(0)),
+                                               
+                                               actionButton("button_enviar", "Enviar", class = "btn-primary")
+                                             ),
+                                             
+                                             tags$head(tags$style("#formbs .modal-footer{display:none}
+                                                                           .modal-header{display:none}")) ),
                               
                               fluidPage(
                                 
