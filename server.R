@@ -15,7 +15,7 @@ suppressPackageStartupMessages(library(ggpmisc))
 library(openxlsx)
 library(rmarkdown)
 library(stringr)
-#library(googledrive)
+library(googledrive)
 library(googlesheets)
 library(rgeolocate)
 #library(shinyalert)
@@ -488,7 +488,7 @@ shinyServer(function(input, output, session){
     fingerprint <- input$fingerprint
     ipid <- input$ipid
     
-    suppressMessages(gs_auth("googlesheets_token.rds",verbose = F))
+    suppressMessages(googlesheets::gs_auth("googlesheets_token.rds",verbose = F))
     
     # pega informacoes com base no ip
     result <- rgeolocate::ip_api(input$ipid)
@@ -546,7 +546,7 @@ shinyServer(function(input, output, session){
     #googlesheets::gs_new(title=paste(round(abs(rnorm(1,1,1)),2),"cub_app", Sys.Date(),format(Sys.time(), "%H_%M_%S"),sep = "_"),input = df_up,trim = FALSE,verbose = FALSE)
     
     #login
-    suppressMessages(drive_auth("googlesheets_token.rds",verbose = F))
+    suppressMessages(googledrive::drive_auth("googlesheets_token.rds",verbose = F))
     
     #nome do arquivo
     fn <-paste(Sys.Date(),format(Sys.time(),"%H_%M_%S"),round(abs(rnorm(1,1,1)),2),"cub_app",".csv",sep = "_")
@@ -555,7 +555,7 @@ shinyServer(function(input, output, session){
     write.csv(df_up,file = fn,row.names = FALSE)
     
     # manda pro drive
-    suppressMessages(drive_upload(fn, paste("CubagemApp",fn,sep="/"),verbose = F))
+    suppressMessages(googledrive::drive_upload(fn, paste("CubagemApp",fn,sep="/"),verbose = F))
     
     # delete arquivo temporario
     unlink(fn)
