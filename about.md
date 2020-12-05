@@ -12,25 +12,30 @@ precisamos de doações para cobrir os custos do servidor que mantêm o app disp
 
 <div><p style="float:left;">
 
-<p><font size="5"> Mariana Miranda Andrade </a></font></p>
+<p><font size="5"> Mariana Miranda Andrade </font></p>
 
-<p><font size="5"> Múcio Nepomuceno </a></font></p>
+<p><font size="5"> Múcio Nepomuceno </font></p>
 
-<p><font size="5"> Rauff Barbosa </a></font></p>
+<p><font size="5"> Rauff Barbosa </font></p>
 
-<p><font size="5"> Karizen Patriota </a></font></p>
+<p><font size="5"> Karizen Patriota </font></p>
 
-<p><font size="5"> Fernanda Luiza Silva de Oliveira </a></font></p>
+<p><font size="5"> Fernanda Luiza Silva de Oliveira </font></p>
 
-<p><font size="5"> Jorge Luiz Mainart </a></font></p>
+<p><font size="5"> Jorge Luiz Mainart </font></p>
 
 </div>
 
-###  Para contribuir com o nosso projeto, basta clicar no botão do PayPal abaixo, ou transferir via PIX, escaneando o código QR!
+###  Contribua com o nosso projeto via PIX por chave ou código QR, ou por cartão de crédito via Paypal:
 
 <div style="text-align:center">
 
+<b><font size="5"> Chave PIX: suiteforest<span>@</span>gmail.com</font></b>
+
+<p><font size="5"> Código QR PIX: </font></p>
 <img src="www/pix_sollano.png" width="150" height="150" />
+
+<b><font size="5"> PayPal </font></b>
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick" />
