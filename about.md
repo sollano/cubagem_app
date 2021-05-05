@@ -9,8 +9,6 @@ Contamos com a sua contribuição!
 Lembrando que via PIX ou paypal, é possível cadastrar um pagamento mensal automático,
 assim todo mês você ajuda um pouco.
 
-## Meta Maio: R$ 6 de 150 
-
 ###  Contribua com o nosso projeto via PIX por chave ou código QR, ou por cartão de crédito via Paypal:
 
 <div style="text-align:center">
